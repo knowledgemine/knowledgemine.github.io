@@ -3,7 +3,10 @@
 CLI (`uv run dmg-gis …`) that scrapes the public DMG Nepal GIS portal and exports/maps it. See README.md for usage.
 
 - Code: `src/dmg_gis/` — `download.py` (HTTP), `layers.py` (raw → GeoDataFrames), `export.py` (all-Nepal files), `area.py` (clip + map), `__init__.py` (CLI).
-- Web app "Khani Map": `web/index.html`, `web/style.css`, `web/app.js` (Leaflet 1.9.4 + Turf 6.5.0 from cdnjs, no build step). `dmg-gis web` writes simplified layers to `web/data/` (`src/dmg_gis/web.py`) and serves on :8765. Browser spatial logic mirrors `area.py`: >1 ha overlap = inside, distances edge-to-edge.
+- Web app "Khani Insights": `web/index.html`, `web/style.css`, `web/app.js` (shared data + Map view), `web/views.js` (Overview, Licence check, Holder, Mineral, hash router). Leaflet 1.9.4 + Turf 6.5.0 from cdnjs, no build step. `dmg-gis web` runs `enrich.py` (B.S.→A.D. dates via nepali-datetime, issue FY from licence no, Chure/park/Rokka overlaps, Fast Track distance, neighbour counts) and writes simplified layers to `web/data/`, then serves on :8765 (next free port if busy).
+- Business figures exclude Rokka (DMG reserve areas, huge, no holder); keep that split when adding stats.
+- Licence-type colours are a validated categorical palette in fixed order (`TYPE_COLORS` in app.js); don't reorder or add hues.
+- `.github/workflows/pages.yml` rebuilds and deploys to GitHub Pages weekly and on push.
 - `data/`, `output/` and `web/data/` are gitignored; regenerate with `download` then `export` / `area`.
 - Portal quirks to keep in mind:
   - GeoServer WFS GetFeature fails server-side; use WMS GetMap with `format=application/vnd.google-earth.kml+xml` and `KMATTR:true`. Attributes arrive as HTML in `<description>` and are parsed by regex in `layers.read_kml`.

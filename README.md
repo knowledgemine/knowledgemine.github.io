@@ -22,25 +22,44 @@ uv run dmg-gis area Kamalamai --buffer-km 2      # any local level, any buffer
 uv run dmg-gis list --district Tanahu            # local-level names to use with `area`
 ```
 
-## Khani Map (web app)
+## Khani Insights (web app for mine operators)
 
-An interactive map explorer in `web/`:
+A web app in `web/` that turns DMG's data into business information for licence holders:
 
 ```bash
 uv run dmg-gis web        # builds web/data from data/raw, then opens http://127.0.0.1:8765
 ```
 
-- **Municipality**: type a name (spelling-tolerant), choose a distance from 0 to 25 km, and see every licence inside it and nearby. Licences are flagged "Inside" and sorted by distance.
-- **Point on map**: click anywhere to see licences within the chosen distance of that spot.
-- **All Nepal**: browse all 1,414 licences.
-- **Filters**: status, licence type, mineral, and validity judged from the B.S. end date (still valid, ends within 1 year, date passed).
-- **Licence details**: click a licence for holder, place, area, map sheet, UTM corners, B.S. dates and a Google Maps link.
-- **Export**: copy or download the current results as CSV.
-- **Map layers**: municipality and district boundaries, Chure, national parks and buffer zones, topo sheets, Fast Track; topographic, satellite or plain background.
-- **Links**: the address bar keeps the current search (e.g. `#place=Byas|TANAHU|5`), so a view can be bookmarked.
+**Overview**: national picture for company licences. Key findings written from the data, licences by
+mineral and province, the renewal wave (end dates by B.S. year), new licences by fiscal year, the largest
+holders, and the districts where applications are piling up.
 
-Today's B.S. date is estimated from the computer's clock, so expiry can be a day or two off.
-Map tiles load from Esri and CARTO, so the background needs internet; the licence data itself is local.
+**Licence check** (`#licence=10/076/77`, or search by number or company name):
+- days left on the term, from the exact B.S. end date converted to A.D., with a progress bar
+- risk check: overlap with Chure, national parks and buffer zones, Rokka (reserved) areas,
+  distance to the Fast Track, pending applications within 5 km
+- every licence within 5 km (same mineral marked), and the holder's other licences
+- copy a plain-text summary to share, or open it on the map or Google Maps
+
+**Company portfolio** (`#holder=...`): all licences under one name, soonest end date first.
+
+**Mineral market** (`#mineral=Limestone`): approved and pending counts, districts, new licences by year,
+largest holders and their share of area, licences ending within 2 years, newest applicants.
+
+**Map**: search a municipality or click a point, set a radius, filter, export CSV.
+
+Notes on the numbers:
+- **Rokka** licences are large areas DMG holds in reserve (1.6 million ha, no holder). They are left out
+  of business figures and shown instead as a risk on licences that overlap them.
+- The licence number's fiscal year (`076/77` → FY 2076/77) is used as the issue year.
+- Holders are grouped by a cleaned company name, so spelling variants may still split one company.
+- Map tiles load from Esri and CARTO, so the background needs internet.
+
+### Publishing for operators
+
+`.github/workflows/pages.yml` downloads fresh DMG data every Sunday (and on each push), rebuilds the app
+and publishes it with GitHub Pages. It needs Pages turned on with **Source: GitHub Actions** in the
+repository settings, and the repository must be public unless the account has a paid plan.
 
 Run `download` again whenever you want fresh data; the other commands read from `data/raw`.
 Names are matched loosely ("Vyas" finds "Byas"). If a name exists in two districts, the tool

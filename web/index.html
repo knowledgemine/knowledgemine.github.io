@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Khani Map</title>
-<meta name="description" content="Explore Nepal's mining licences around any municipality or point, from DMG's GIS portal data.">
+<title>Khani Insights</title>
+<meta name="description" content="Licence status, expiry, risk and market insight for Nepal's mine operators, from DMG's GIS data.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -12,13 +12,101 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
-  <aside class="panel" aria-label="Search and results">
-    <header class="brand">
-      <h1>Khani Map</h1>
-      <p class="sub">Mining licences of Nepal · DMG data <span id="asof"></span></p>
-    </header>
+<header class="topbar">
+  <a class="logo" href="#overview">Khani Insights</a>
+  <nav class="tabs" aria-label="Sections">
+    <a href="#overview" data-view="overview">Overview</a>
+    <a href="#licence" data-view="licence">Licence check</a>
+    <a href="#mineral" data-view="mineral">Minerals</a>
+    <a href="#map" data-view="map">Map</a>
+  </nav>
+  <span class="asof mono" id="asof"></span>
+</header>
 
+<!-- ================= OVERVIEW ================= -->
+<main id="view-overview" class="view page" hidden>
+  <section class="intro">
+    <h1>Nepal's mining licences at a glance</h1>
+    <p class="lede">Every active licence the Department of Mines and Geology publishes, checked against today's date,
+      Chure, protected areas and neighbouring licences. Pick a licence, a company or a mineral to dig in.</p>
+  </section>
+
+  <section class="kpis" id="kpis" aria-label="Key figures"></section>
+
+  <section class="card findings">
+    <h2>Key findings</h2>
+    <ul id="findings"></ul>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="card-head"><h2>Licences by mineral</h2><span class="legend-inline" id="lg-mineral"></span></div>
+      <p class="note">Top 12 minerals. Click a row to open that mineral's market.</p>
+      <div id="ch-mineral" class="hbars"></div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Renewal wave</h2></div>
+      <p class="note">Company licences whose term ends in each B.S. year. <span style="color:var(--accent);font-weight:600">Copper bars</span> are the next four years.</p>
+      <div id="ch-expiry" class="cols"></div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>New licences by fiscal year</h2></div>
+      <p class="note">Fiscal year in the licence number, e.g. 10/<b>076/77</b>. The latest year is still running.</p>
+      <div id="ch-fy" class="cols"></div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Licences by province</h2><span class="legend-inline" id="lg-prov"></span></div>
+      <div id="ch-prov" class="hbars"></div>
+    </section>
+  </div>
+
+  <div class="grid2">
+    <section class="card">
+      <h2>Largest licence holders</h2>
+      <p class="note">Grouped by company name. Click to see a company's licences.</p>
+      <div class="tablewrap"><table id="tb-holders" class="tbl"></table></div>
+    </section>
+    <section class="card">
+      <h2>Where competition is growing</h2>
+      <p class="note">Districts with the most applications under process.</p>
+      <div class="tablewrap"><table id="tb-pending" class="tbl"></table></div>
+    </section>
+  </div>
+</main>
+
+<!-- ================= LICENCE CHECK ================= -->
+<main id="view-licence" class="view page" hidden>
+  <section class="intro">
+    <h1>Licence check</h1>
+    <p class="lede">Enter a licence number or company name to see its term, days left, risks and who operates around it.</p>
+    <div class="searchrow">
+      <label for="lic-q" class="sr">Licence number or company</label>
+      <input id="lic-q" type="search" list="lic-list" autocomplete="off" spellcheck="false" placeholder="e.g. 10/076/77 or Shivam Cement">
+      <datalist id="lic-list"></datalist>
+      <button id="lic-go" class="btn" type="button">Check</button>
+    </div>
+    <p id="lic-msg" class="hint" hidden></p>
+  </section>
+  <div id="lic-out"></div>
+</main>
+
+<!-- ================= MINERALS ================= -->
+<main id="view-mineral" class="view page" hidden>
+  <section class="intro">
+    <h1>Mineral market</h1>
+    <p class="lede">Where each mineral is licensed, who holds it, what's coming through the pipeline and what's ending soon.</p>
+    <div class="searchrow">
+      <label for="min-sel" class="sr">Mineral</label>
+      <select id="min-sel"></select>
+      <button id="min-map" class="btn ghost" type="button">Show on map</button>
+    </div>
+  </section>
+  <div id="min-out"></div>
+</main>
+
+<!-- ================= MAP ================= -->
+<div id="view-map" class="view mapview" hidden>
+  <aside class="panel" aria-label="Search and results">
     <section class="block" aria-labelledby="h-where">
       <h2 id="h-where" class="label">Where</h2>
       <div class="seg" role="tablist" aria-label="Search by">
@@ -28,11 +116,8 @@
       </div>
       <div id="place-box" class="stack">
         <label for="place" class="sr">Municipality or rural municipality</label>
-        <div class="search">
-          <input id="place" type="search" list="place-list" autocomplete="off" spellcheck="false"
-                 placeholder="e.g. Vyas, Kamalamai, Bharatpur">
-          <datalist id="place-list"></datalist>
-        </div>
+        <input id="place" type="search" list="place-list" autocomplete="off" spellcheck="false" placeholder="e.g. Vyas, Kamalamai, Bharatpur">
+        <datalist id="place-list"></datalist>
         <div id="place-choices" class="choices" hidden></div>
         <p id="place-msg" class="hint" hidden></p>
       </div>
@@ -54,12 +139,12 @@
           <select id="mineral"><option value="">All minerals</option></select>
         </div>
         <div>
-          <label for="validity" class="small">Validity (by B.S. date)</label>
+          <label for="validity" class="small">Term</label>
           <select id="validity">
             <option value="">Any</option>
-            <option value="valid">Still valid</option>
+            <option value="valid">Still running</option>
             <option value="soon">Ends within 1 year</option>
-            <option value="expired">Date passed</option>
+            <option value="expired">End date passed</option>
           </select>
         </div>
       </div>
@@ -96,22 +181,24 @@
         <label class="check"><input id="lyr-ktft" type="checkbox"> Kathmandu–Terai Fast Track</label>
       </div>
     </details>
-
-    <footer class="foot">
-      Source: <a href="http://gis.dmgnepal.gov.np" target="_blank" rel="noopener">gis.dmgnepal.gov.np</a>.
-      Only data DMG publishes; expiry is judged from the B.S. end date, not DMG's own status.
-    </footer>
   </aside>
-
-  <main class="mapwrap">
-    <div id="map" aria-label="Map"></div>
+  <section class="mapwrap" aria-label="Map">
+    <div id="map"></div>
     <div class="legend" id="legend" aria-label="Legend"></div>
-    <div id="toast" class="toast" role="status" hidden></div>
-  </main>
+  </section>
 </div>
+
+<footer class="foot page-foot" id="foot">
+  Source: <a href="http://gis.dmgnepal.gov.np" target="_blank" rel="noopener">DMG Nepal GIS portal</a>.
+  This tool shows only what DMG publishes and is not an official record. Confirm renewals, fees and legal limits with DMG.
+</footer>
+
+<div id="tip" class="tip" role="tooltip" hidden></div>
+<div id="toast" class="toast" role="status" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/6.5.0/turf.min.js"></script>
 <script src="app.js"></script>
+<script src="views.js"></script>
 </body>
 </html>

@@ -9,6 +9,7 @@ dependencies = [
     "contextily>=1.6",
     "requests>=2.31",
     "openpyxl>=3.1",
+    "nepali-datetime>=1.0.8.5",
 ]
 
 [project.scripts]

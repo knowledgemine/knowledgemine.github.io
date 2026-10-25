@@ -1,0 +1,45 @@
+# Rebuild Khani Insights from fresh DMG data and publish it to GitHub Pages.
+# Runs every Sunday morning Nepal time, on every push to main, and on demand (Actions tab -> Run workflow).
+name: Publish Khani Insights
+
+on:
+  schedule:
+    - cron: "30 0 * * 0"   # 06:15 Nepal time, Sunday
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install
+        run: uv sync
+      - name: Download DMG data
+        run: uv run dmg-gis download
+      - name: Build web data
+        run: uv run dmg-gis web --no-serve
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -444,6 +444,7 @@ dependencies = [
     { name = "contextily" },
     { name = "geopandas" },
     { name = "matplotlib" },
+    { name = "nepali-datetime" },
     { name = "openpyxl" },
     { name = "requests" },
 ]
@@ -453,6 +454,7 @@ requires-dist = [
     { name = "contextily", specifier = ">=1.6" },
     { name = "geopandas", specifier = ">=1.0" },
     { name = "matplotlib", specifier = ">=3.8" },
+    { name = "nepali-datetime", specifier = ">=1.0.8.5" },
     { name = "openpyxl", specifier = ">=3.1" },
     { name = "requests", specifier = ">=2.31" },
 ]
@@ -805,6 +807,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d2/c6/87409bcb26fb68c393fa8cf58ba09363aa7298cfb438a0109b5cb14bc98b/mercantile-1.2.1.tar.gz", hash = "sha256:fa3c6db15daffd58454ac198b31887519a19caccee3f9d63d17ae7ff61b3b56b", size = 26352, upload-time = "2021-04-21T14:42:41.096Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b2/d6/de0cc74f8d36976aeca0dd2e9cbf711882ff8e177495115fd82459afdc4d/mercantile-1.2.1-py3-none-any.whl", hash = "sha256:30f457a73ee88261aab787b7069d85961a5703bb09dc57a170190bc042cd023f", size = 14779, upload-time = "2021-04-21T14:42:39.841Z" },
+]
+
+[[package]]
+name = "nepali-datetime"
+version = "1.0.8.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/25/dac3e744b0a6af03e05a25ab868a032d51993d0e91be70ea38b814b4c047/nepali_datetime-1.0.8.5.tar.gz", hash = "sha256:745093e929cfe164e1062058221e9a9eac25d89083b1b43b3bb2aa8e854f2884", size = 20357, upload-time = "2026-05-07T13:26:18.475Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d0/41/6ef290b5ab1671a0d421d105ee59d3d02b5c96004ba77f2ccb0b99a55e8f/nepali_datetime-1.0.8.5-py3-none-any.whl", hash = "sha256:adec683e06333482d31543d0d2bdf195cef12505615eaf747bcae0b82e5f6ad2", size = 18638, upload-time = "2026-05-07T13:26:17.237Z" },
 ]
 
 [[package]]
