@@ -48,8 +48,21 @@ def build_web_data(layers: dict[str, gpd.GeoDataFrame], out: Path, downloaded: s
 
 def serve(web: Path, port: int):
     handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(web))
-    with http.server.ThreadingHTTPServer(("127.0.0.1", port), handler) as httpd:
-        url = f"http://127.0.0.1:{port}/"
-        print(f"Map explorer running at {url}  (Ctrl+C to stop)")
-        webbrowser.open(url)
-        httpd.serve_forever()
+    for p in range(port, port + 20):  # an earlier run may still hold the port
+        try:
+            httpd = http.server.ThreadingHTTPServer(("127.0.0.1", p), handler)
+            break
+        except OSError:
+            continue
+    else:
+        raise SystemExit(f"Ports {port}-{port + 19} are all busy. Close other copies, or pass --port.")
+    url = f"http://127.0.0.1:{p}/"
+    if p != port:
+        print(f"Port {port} is busy (another copy is probably still running), using {p}.", flush=True)
+    print(f"Map explorer running at {url}\nOpen that address in your browser. Press Ctrl+C to stop.", flush=True)
+    webbrowser.open(url)
+    with httpd:
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("\nStopped.")
