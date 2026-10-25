@@ -50,6 +50,11 @@ largest holders and their share of area, licences ending within 2 years, newest 
 
 **Map**: search a municipality or click a point, set a radius, filter, export CSV.
 
+**On phones**: tabs sit at the bottom within thumb reach, the licence page shows days left and the risk
+check before the details, and operators can tap **☆ Save** on their licences. Saved licences appear at the
+top of Home with warnings, stored on that phone only (no account). The site can be added to the home
+screen (Share → Add to Home Screen on iPhone, menu → Add to Home screen on Android) and opens like an app.
+
 Notes on the numbers:
 - **Rokka** licences are large areas DMG holds in reserve (1.6 million ha, no holder). They are left out
   of business figures and shown instead as a risk on licences that overlap them.

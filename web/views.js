@@ -13,6 +13,32 @@ const curBS = () => +(META.built_bs || "2083").slice(0, 4);
 const fyLabel = (y) => `${y}/${String((y + 1) % 100).padStart(2, "0")}`;
 const ha = (n) => `${fmt(Math.round(n))} ha`;
 
+/* ---------- "My licences": saved on this device only ---------- */
+const SAVE_KEY = "khani.saved.v1";
+function getSaved() { try { return JSON.parse(localStorage.getItem(SAVE_KEY)) || []; } catch { return []; } }
+function setSaved(a) { try { localStorage.setItem(SAVE_KEY, JSON.stringify(a)); } catch { toast("This browser blocks saving. Bookmark the licence page instead."); } }
+function toggleSaved(no) {
+  const s = getSaved(), i = s.indexOf(no);
+  i >= 0 ? s.splice(i, 1) : s.push(no);
+  setSaved(s);
+  return i < 0;
+}
+const riskCount = (p) => (p.chure_pct > 0) + !!p.park + !!p.rokka_overlap + (p.ktft_km != null && p.ktft_km < 2);
+
+function renderSaved(el) {
+  const list = getSaved().map((no) => D.lic.find((p) => p.l_license_no === no)).filter(Boolean)
+    .sort((a, b) => (a._days ?? 1e9) - (b._days ?? 1e9));
+  if (!list.length) { el.hidden = true; return; }
+  const exp = list.filter((p) => p._term === "expired").length, soon = list.filter((p) => p._term === "soon").length;
+  const risky = list.filter((p) => riskCount(p)).length;
+  const alerts = [exp && `<span class="pill exp">${exp} end date passed</span>`, soon && `<span class="pill soon">${soon} ending within 1 yr</span>`,
+    risky && `<span class="pill soon">${risky} with risk flags</span>`].filter(Boolean).join("");
+  el.hidden = false;
+  el.innerHTML = `<div class="card-head"><h2>My licences (${list.length})</h2><span class="note">Saved on this device</span></div>
+    ${alerts ? `<div class="tags">${alerts}</div>` : `<p class="note">All saved licences are running with no risk flags.</p>`}
+    <div class="portfolio">${list.map(pcard).join("")}</div>`;
+}
+
 /* ---------- tooltip for [data-tip] ---------- */
 document.addEventListener("pointermove", (e) => {
   const t = e.target.closest && e.target.closest("[data-tip]");
@@ -132,9 +158,9 @@ function renderOverview() {
   const holderRows = Object.entries(groupBy(A.filter((p) => p.holder_key), (p) => p.holder_key))
     .map(([k, l]) => ({ k, l, n: l.length, area: sum(l.filter((p) => p.status === "Approved"), (p) => p.area_ha_calc) }))
     .sort((a, b) => b.n - a.n || b.area - a.area).slice(0, 12);
-  $("tb-holders").innerHTML = `<thead><tr><th>Holder</th><th class="num">Licences</th><th class="num">Approved area</th><th>Minerals</th></tr></thead><tbody>` +
+  $("tb-holders").innerHTML = `<thead><tr><th>Holder</th><th class="num">Licences</th><th class="num">Approved area</th><th class="hide-sm">Minerals</th></tr></thead><tbody>` +
     holderRows.map((r) => `<tr class="click" data-hash="holder=${esc(r.k)}"><td>${esc(holderName(r.l))}<div class="sub">${topKeys(r.l, "district", 2).map(title).join(", ")}</div></td>
-      <td class="num">${r.n}</td><td class="num">${ha(r.area)}</td><td>${esc(topKeys(r.l, "mp_name").join(", "))}</td></tr>`).join("") + "</tbody>";
+      <td class="num">${r.n}</td><td class="num">${ha(r.area)}</td><td class="hide-sm">${esc(topKeys(r.l, "mp_name").join(", "))}</td></tr>`).join("") + "</tbody>";
 
   const distRows = Object.entries(groupBy(A, (p) => p.district)).map(([d, l]) => ({ d, l, ...statusSplit(l) }))
     .sort((a, b) => b.u - a.u).slice(0, 10);
@@ -181,13 +207,16 @@ function searchLicence(q) {
       : pcard(p)).join("")}</div></section>`;
 }
 
+const TERM_CLS = { expired: "bad", soon: "warn", valid: "ok", none: "none" };
 function pcard(p) {
   const d = p._days;
-  const when = d == null ? "No end date published" : d < 0 ? `End date passed ${humanDays(d)} ago` : `${humanDays(d)} left`;
-  return `<a class="pcard" href="${licLink(p)}"><span class="no">${esc(p.l_license_no)}</span>
+  const when = d == null ? "No end date" : d < 0 ? `Ended ${humanDays(d)} ago` : `${humanDays(d)} left`;
+  const r = riskCount(p);
+  return `<a class="pcard" href="${licLink(p)}">
+    <span class="pc-top"><span class="no">${esc(p.l_license_no)}</span><span class="days ${TERM_CLS[p._term]}">${when}</span></span>
     <span class="min">${esc(p.mp_name || "—")} · ${esc(p.licence_type)}</span>
     <span class="meta">${esc([p.local_level, title(p.district)].filter(Boolean).join(", "))}</span>
-    <span class="meta">${when}</span><span class="tags">${pills(p)}</span></a>`;
+    <span class="tags">${pills(p)}${r ? `<span class="pill soon">${r} risk flag${r > 1 ? "s" : ""}</span>` : ""}</span></a>`;
 }
 
 function adLong(iso) {
@@ -231,16 +260,23 @@ function renderLicence(no, isExample = false) {
   const mine = p.holder_key ? D.lic.filter((x) => x.holder_key === p.holder_key && x !== p) : [];
   const [lng, lat] = p._c;
 
+  const flags = checks.filter((c) => c[0] !== "ok").length;
+  const saved = getSaved().includes(p.l_license_no);
+  const dist = (d) => (d === 0 ? "touching" : d < 1 ? `${Math.round(d * 1000)} m` : `${d.toFixed(1)} km`);
+
   $("lic-out").innerHTML = `
   ${isExample ? `<p class="example">Example licence. Search above for yours.</p>` : ""}
   <div class="lic-grid">
-    <div class="stackcol" style="display:flex;flex-direction:column;gap:18px;min-width:0">
-      <section class="card">
-        <div class="lic-title">
-          <span class="min">${esc(p.mp_name || "Unknown mineral")}</span>
-          <span class="no">${esc(p.l_license_no)}</span>
-          <span class="tags"><span class="pill type">${esc(p.licence_type)}</span>${pills(p)}</span>
+    <div class="lic-col">
+      <section class="card o1">
+        <div class="lic-head">
+          <div class="lic-title">
+            <span class="min">${esc(p.mp_name || "Unknown mineral")}</span>
+            <span class="no">${esc(p.l_license_no)}</span>
+          </div>
+          <button class="save" id="lic-save" type="button" aria-pressed="${saved}">${saved ? "★ Saved" : "☆ Save"}</button>
         </div>
+        <span class="tags"><span class="pill type">${esc(p.licence_type)}</span>${pills(p)}</span>
         <div class="term">
           <span class="big ${bigCls}">${big}</span>
           <span>${d == null || d < 0 ? "" : "left on this term"}</span>
@@ -248,46 +284,52 @@ function renderLicence(no, isExample = false) {
         </div>
         ${prog != null ? `<div class="progress ${progCls}" data-tip="${Math.round(prog)}% of the term used"><i style="width:${prog}%"></i></div>
         <div class="dates"><span>Started ${esc(p.l_from_date)} B.S. · ${adLong(p.from_date_ad)}</span><span>Ends ${esc(p.l_to_date)} B.S. · ${adLong(p.to_date_ad)}</span></div>` : ""}
-        <dl class="facts">
-          <dt>Holder</dt><dd>${esc(p.lh_name || "Not published")}${p.lh_address ? `, ${esc(p.lh_address)}` : ""}</dd>
-          <dt>Place</dt><dd>${esc([p.l_address, p.local_level, title(p.district), p.province].filter(Boolean).join(", "))}</dd>
-          <dt>Area</dt><dd>${p.area_ha_calc} ha on the map${p.l_total_area ? ` · DMG record ${(+p.l_total_area * 100).toFixed(2)} ha` : ""}</dd>
-          ${p.l_map_no ? `<dt>Map sheet</dt><dd>${esc(p.l_map_no)}</dd>` : ""}
-          ${p.l_easting_from ? `<dt>UTM corners</dt><dd class="mono">E ${p.l_easting_from}–${p.l_easting_to} · N ${p.l_northing_from}–${p.l_northing_to}</dd>` : ""}
-          ${p.issue_year_bs ? `<dt>Issued in</dt><dd>FY ${fyLabel(p.issue_year_bs)}</dd>` : ""}
-          <dt>Location</dt><dd class="mono">${lat.toFixed(5)}, ${lng.toFixed(5)}</dd>
-        </dl>
         <div class="rowbtns">
           <a class="btn" href="#point=${lat.toFixed(5)}|${lng.toFixed(5)}|5">Show on map</a>
           <button class="btn ghost" type="button" id="lic-copy">Copy summary</button>
           <a class="btn ghost" href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" rel="noopener">Google Maps</a>
         </div>
       </section>
-      ${mine.length ? `<section class="card"><h2>Other licences of this holder (${mine.length})</h2>
-        <p class="note">Sorted by end date. <a href="#holder=${esc(p.holder_key)}">Open the full portfolio →</a></p>
+      <section class="card o3"><h2>Details</h2>
+        <dl class="facts">
+          <dt>Holder</dt><dd>${esc(p.lh_name || "Not published")}${p.lh_address ? `, ${esc(p.lh_address)}` : ""}</dd>
+          <dt>Place</dt><dd>${esc([p.l_address, p.local_level, title(p.district), p.province].filter(Boolean).join(", "))}</dd>
+          <dt>Area</dt><dd>${p.area_ha_calc} ha on the map${p.l_total_area ? ` · DMG record ${(+p.l_total_area * 100).toFixed(2)} ha` : ""}</dd>
+          ${p.l_map_no ? `<dt>Map sheet</dt><dd>${esc(p.l_map_no)}</dd>` : ""}
+          ${p.l_easting_from ? `<dt>UTM corners</dt><dd class="mono">E ${p.l_easting_from}–${p.l_easting_to}<br>N ${p.l_northing_from}–${p.l_northing_to}</dd>` : ""}
+          ${p.issue_year_bs ? `<dt>Issued in</dt><dd>FY ${fyLabel(p.issue_year_bs)}</dd>` : ""}
+          <dt>Location</dt><dd class="mono">${lat.toFixed(5)}, ${lng.toFixed(5)}</dd>
+        </dl>
+      </section>
+      ${mine.length ? `<section class="card o5"><h2>Other licences of this holder (${mine.length})</h2>
+        <p class="note">Soonest end date first. <a href="#holder=${esc(p.holder_key)}">Open the full portfolio →</a></p>
         <div class="portfolio">${mine.sort((a, b) => (a._days ?? 1e9) - (b._days ?? 1e9)).slice(0, 8).map(pcard).join("")}</div></section>` : ""}
     </div>
-    <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
-      <section class="card"><h2>Risk check</h2>
+    <div class="lic-col">
+      <section class="card o2"><div class="card-head"><h2>Risk check</h2>
+          <span class="pill ${flags ? "soon" : "st-Approved"}">${flags ? `${flags} to check` : "No flags"}</span></div>
         <ul class="checks">${checks.map(([c, ic, t, s]) => `<li class="${c}"><span class="ic">${ic}</span><span>${t}${s ? `<small>${s}</small>` : ""}</span></li>`).join("")}</ul>
       </section>
-      <section class="card"><h2>Within ${META.near_km || 5} km</h2>
+      <section class="card o4"><h2>Within ${META.near_km || 5} km</h2>
         <div class="nstats">
           <div><b>${nb.length}</b><span>licences</span></div>
           <div><b>${nb.filter((x) => x.q.mp_name === p.mp_name).length}</b><span>same mineral</span></div>
           <div><b>${nb.filter((x) => x.q.status === "Under process").length}</b><span>under process</span></div>
         </div>
-        <div class="tablewrap"><table class="tbl"><thead><tr><th>Licence</th><th>Mineral</th><th>Holder</th><th class="num">Distance</th></tr></thead><tbody>
-          ${nb.slice(0, 12).map(({ q, d }) => `<tr class="click" data-hash="licence=${esc(q.l_license_no)}">
-            <td class="mono">${esc(q.l_license_no)}<div class="sub">${esc(q.status)}</div></td>
-            <td>${esc(q.mp_name || "—")}${q.mp_name === p.mp_name ? ` <span class="pill same">same</span>` : ""}</td>
-            <td>${esc(q.lh_name || "—")}</td><td class="num">${d === 0 ? "touching" : d < 1 ? `${Math.round(d * 1000)} m` : `${d.toFixed(1)} km`}</td></tr>`).join("") ||
-            `<tr><td colspan="4" class="sub">No other licences within ${META.near_km || 5} km.</td></tr>`}
-        </tbody></table></div>
+        <ul class="nlist">${nb.slice(0, 12).map(({ q, d }) => `<li><a href="${licLink(q)}">
+            <span class="top"><span class="no">${esc(q.l_license_no)}</span><span class="dist">${dist(d)}</span></span>
+            <span><b>${esc(q.mp_name || "—")}</b>${q.mp_name === p.mp_name ? ` <span class="pill same">same mineral</span>` : ""} · ${esc(q.status)}</span>
+            <span class="meta">${esc(q.lh_name || "Holder not published")}</span></a></li>`).join("")
+          || `<li class="note">No other licences within ${META.near_km || 5} km.</li>`}</ul>
       </section>
     </div>
   </div>`;
-  $("lic-out").querySelectorAll("[data-hash]").forEach((r) => (r.onclick = () => (location.hash = r.dataset.hash)));
+  $("lic-save").onclick = (e) => {
+    const on = toggleSaved(p.l_license_no);
+    e.currentTarget.setAttribute("aria-pressed", on);
+    e.currentTarget.textContent = on ? "★ Saved" : "☆ Save";
+    toast(on ? "Saved to My licences" : "Removed from My licences");
+  };
   $("lic-copy").onclick = async () => {
     const txt = [`Licence ${p.l_license_no} · ${p.mp_name} · ${p.licence_type} · ${p.status}`,
       `Holder: ${p.lh_name || "-"}`, `Place: ${[p.l_address, p.local_level, title(p.district)].filter(Boolean).join(", ")}`,
@@ -386,9 +428,9 @@ function renderMineral(name) {
       <td>${esc(p.lh_name || "—")}<div class="sub">${esc(title(p.district))}</div></td><td class="num">${esc(p.l_to_date)}<div class="sub">${humanDays(p._days)}</div></td></tr>`).join("")
       || `<tr><td colspan="3" class="sub">None end within 2 years.</td></tr>`) + "</tbody>";
   const pr = pend.slice().sort((a, b) => (b.issue_year_bs || 0) - (a.issue_year_bs || 0)).slice(0, 12);
-  $("mtb-pend").innerHTML = `<thead><tr><th>Licence</th><th>Applicant</th><th>Place</th><th class="num">FY</th></tr></thead><tbody>` +
+  $("mtb-pend").innerHTML = `<thead><tr><th>Licence</th><th>Applicant</th><th class="hide-sm">Place</th><th class="num">FY</th></tr></thead><tbody>` +
     (pr.map((p) => `<tr class="click" data-hash="licence=${esc(p.l_license_no)}"><td class="mono">${esc(p.l_license_no)}</td><td>${esc(p.lh_name || "—")}</td>
-      <td>${esc([p.local_level, title(p.district)].filter(Boolean).join(", "))}</td><td class="num">${p.issue_year_bs ? fyLabel(p.issue_year_bs) : "—"}</td></tr>`).join("")
+      <td class="hide-sm">${esc([p.local_level, title(p.district)].filter(Boolean).join(", "))}</td><td class="num">${p.issue_year_bs ? fyLabel(p.issue_year_bs) : "—"}</td></tr>`).join("")
       || `<tr><td colspan="4" class="sub">No applications under process.</td></tr>`) + "</tbody>";
   $("min-out").querySelectorAll("[data-hash]").forEach((r) => (r.onclick = () => (location.hash = r.dataset.hash)));
 }
@@ -397,7 +439,7 @@ function renderMineral(name) {
 const VIEWS = ["overview", "licence", "mineral", "map"];
 function show(view) {
   for (const v of VIEWS) $(`view-${v}`).hidden = v !== view;
-  document.querySelectorAll(".tabs a").forEach((a) => { if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  document.querySelectorAll(".tabs a, .bottomnav a").forEach((a) => { if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
   document.body.classList.toggle("is-map", view === "map");
   if (view !== "map") window.scrollTo(0, 0);
 }
@@ -406,8 +448,16 @@ function route() {
   const h = decodeURIComponent(location.hash.slice(1));
   const [k, ...rest] = h.split("=");
   const v = rest.join("=");
-  if (!h || k === "overview") { show("overview"); renderOverview(); return; }
-  if (k === "licence") { show("licence"); v ? renderLicence(v) : renderLicence("10/076/77", true); return; }
+  $("saved-lic").hidden = true;
+  if (!h || k === "overview") { show("overview"); renderOverview(); renderSaved($("saved-home")); return; }
+  if (k === "licence" && v) { show("licence"); renderLicence(v); return; }
+  if (k === "licence") {
+    show("licence"); initLicence(); $("lic-msg").hidden = true;
+    renderSaved($("saved-lic"));
+    if ($("saved-lic").hidden) renderLicence("10/076/77", true); // nothing saved yet: show a worked example
+    else { $("lic-out").innerHTML = ""; $("lic-q").value = ""; }
+    return;
+  }
   if (k === "holder") { show("licence"); renderHolder(v); return; }
   if (k === "mineral") { show("mineral"); renderMineral(v); return; }
   if (k === "expiring" || k === "expired") {
@@ -422,6 +472,14 @@ function route() {
 loadData().then(() => {
   $("asof").textContent = META.downloaded ? `DMG data of ${META.downloaded}` : "";
   window.addEventListener("hashchange", route);
+  initLicence(); // fills the licence/company suggestions used by the home search too
+  $("quick-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = $("quick-q").value.trim();
+    if (!q) return;
+    history.replaceState(null, "", "#licence");
+    show("licence"); $("lic-q").value = q; searchLicence(q);
+  });
   route();
 }).catch((err) => {
   console.error(err);

@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Khani Insights</title>
 <meta name="description" content="Licence status, expiry, risk and market insight for Nepal's mine operators, from DMG's GIS data.">
+<meta name="theme-color" content="#1b2428">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Khani">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -23,13 +30,31 @@
   <span class="asof mono" id="asof"></span>
 </header>
 
+<nav class="bottomnav" aria-label="Sections">
+  <a href="#overview" data-view="overview">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg>Home</a>
+  <a href="#licence" data-view="licence">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Licence</a>
+  <a href="#mineral" data-view="mineral">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 5v8l-8 5-8-5V8z M4 8l8 5 8-5 M12 13v8"/></svg>Minerals</a>
+  <a href="#map" data-view="map">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg>Map</a>
+</nav>
+
 <!-- ================= OVERVIEW ================= -->
 <main id="view-overview" class="view page" hidden>
   <section class="intro">
     <h1>Nepal's mining licences at a glance</h1>
     <p class="lede">Every active licence the Department of Mines and Geology publishes, checked against today's date,
-      Chure, protected areas and neighbouring licences. Pick a licence, a company or a mineral to dig in.</p>
+      Chure, protected areas and neighbouring licences.</p>
+    <form class="searchrow" id="quick-form" role="search">
+      <label for="quick-q" class="sr">Licence number or company</label>
+      <input id="quick-q" type="search" list="lic-list" autocomplete="off" spellcheck="false" placeholder="Check a licence: number or company">
+      <button class="btn" type="submit">Check</button>
+    </form>
   </section>
+
+  <section class="card saved" id="saved-home" hidden aria-label="My licences"></section>
 
   <section class="kpis" id="kpis" aria-label="Key figures"></section>
 
@@ -87,6 +112,7 @@
     </div>
     <p id="lic-msg" class="hint" hidden></p>
   </section>
+  <section class="card saved" id="saved-lic" hidden aria-label="My licences"></section>
   <div id="lic-out"></div>
 </main>
 

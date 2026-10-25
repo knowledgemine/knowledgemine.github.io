@@ -419,7 +419,7 @@ function writeMapHash() {
 /* entry points used by the router and other views */
 function openMapFromHash(h) {
   initMap();
-  setTimeout(() => map.invalidateSize(), 0);
+  map.invalidateSize(); // the view was just unhidden; measure before fitting bounds
   let m;
   if ((m = /^all(?:=(.+))?$/.exec(h))) {
     mapState.mineral = m[1] || ""; $("mineral").value = mapState.mineral;
