@@ -24,7 +24,7 @@ uv run dmg-gis list --district Tanahu            # local-level names to use with
 
 ## Khani Insights (web app for mine operators)
 
-**Live: <https://suresh43210.github.io/dmg-nepal-gis-data/>** (data refreshed every Sunday)
+**Live: <https://knowledgemine.github.io/>** (data refreshed every Sunday)
 
 A web app in `web/` that turns DMG's data into business information for licence holders:
 
