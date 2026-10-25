@@ -20,6 +20,9 @@ def main():
     a.add_argument("--buffer-km", type=float, default=5)
     ls = sub.add_parser("list", help="list local levels (optionally in one district)")
     ls.add_argument("--district")
+    w = sub.add_parser("web", help="build the map explorer's data and open it in the browser")
+    w.add_argument("--port", type=int, default=8765)
+    w.add_argument("--no-serve", action="store_true", help="only build web/data")
     args = p.parse_args()
 
     if args.cmd == "download":
@@ -46,6 +49,11 @@ def main():
     if args.cmd == "export":
         from .export import export_all
         export_all(layers, args.out / "nepal")
+    elif args.cmd == "web":
+        from .web import build_web_data, serve
+        build_web_data(layers, ROOT / "web" / "data", downloaded)
+        if not args.no_serve:
+            serve(ROOT / "web", args.port)
     elif args.cmd == "area":
         from .area import make_area
         out, rows = make_area(layers, args.name, args.district, args.buffer_km, args.out / "areas", downloaded)

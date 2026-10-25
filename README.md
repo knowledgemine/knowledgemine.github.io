@@ -22,6 +22,26 @@ uv run dmg-gis area Kamalamai --buffer-km 2      # any local level, any buffer
 uv run dmg-gis list --district Tanahu            # local-level names to use with `area`
 ```
 
+## Khani Map (web app)
+
+An interactive map explorer in `web/`:
+
+```bash
+uv run dmg-gis web        # builds web/data from data/raw, then opens http://127.0.0.1:8765
+```
+
+- **Municipality**: type a name (spelling-tolerant), choose a distance from 0 to 25 km, and see every licence inside it and nearby. Licences are flagged "Inside" and sorted by distance.
+- **Point on map**: click anywhere to see licences within the chosen distance of that spot.
+- **All Nepal**: browse all 1,414 licences.
+- **Filters**: status, licence type, mineral, and validity judged from the B.S. end date (still valid, ends within 1 year, date passed).
+- **Licence details**: click a licence for holder, place, area, map sheet, UTM corners, B.S. dates and a Google Maps link.
+- **Export**: copy or download the current results as CSV.
+- **Map layers**: municipality and district boundaries, Chure, national parks and buffer zones, topo sheets, Fast Track; topographic, satellite or plain background.
+- **Links**: the address bar keeps the current search (e.g. `#place=Byas|TANAHU|5`), so a view can be bookmarked.
+
+Today's B.S. date is estimated from the computer's clock, so expiry can be a day or two off.
+Map tiles load from Esri and CARTO, so the background needs internet; the licence data itself is local.
+
 Run `download` again whenever you want fresh data; the other commands read from `data/raw`.
 Names are matched loosely ("Vyas" finds "Byas"). If a name exists in two districts, the tool
 asks for `--district`; if it finds nothing, it suggests close names.

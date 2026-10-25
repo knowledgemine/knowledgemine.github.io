@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Khani Map</title>
+<meta name="description" content="Explore Nepal's mining licences around any municipality or point, from DMG's GIS portal data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="panel" aria-label="Search and results">
+    <header class="brand">
+      <h1>Khani Map</h1>
+      <p class="sub">Mining licences of Nepal · DMG data <span id="asof"></span></p>
+    </header>
+
+    <section class="block" aria-labelledby="h-where">
+      <h2 id="h-where" class="label">Where</h2>
+      <div class="seg" role="tablist" aria-label="Search by">
+        <button id="mode-place" role="tab" aria-selected="true" class="seg-btn on">Municipality</button>
+        <button id="mode-point" role="tab" aria-selected="false" class="seg-btn">Point on map</button>
+        <button id="mode-all" role="tab" aria-selected="false" class="seg-btn">All Nepal</button>
+      </div>
+      <div id="place-box" class="stack">
+        <label for="place" class="sr">Municipality or rural municipality</label>
+        <div class="search">
+          <input id="place" type="search" list="place-list" autocomplete="off" spellcheck="false"
+                 placeholder="e.g. Vyas, Kamalamai, Bharatpur">
+          <datalist id="place-list"></datalist>
+        </div>
+        <div id="place-choices" class="choices" hidden></div>
+        <p id="place-msg" class="hint" hidden></p>
+      </div>
+      <p id="point-box" class="hint" hidden>Click anywhere on the map to set the centre. <span id="point-at" class="mono"></span></p>
+      <div id="radius-box" class="radius">
+        <label for="km">Distance around it</label>
+        <input id="km" type="range" min="0" max="25" step="0.5" value="5">
+        <output id="km-out" for="km" class="mono">5 km</output>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="h-filter">
+      <h2 id="h-filter" class="label">Filter licences</h2>
+      <div id="status-chips" class="chips" role="group" aria-label="Status"></div>
+      <div id="type-chips" class="chips" role="group" aria-label="Licence type"></div>
+      <div class="row2">
+        <div>
+          <label for="mineral" class="small">Mineral</label>
+          <select id="mineral"><option value="">All minerals</option></select>
+        </div>
+        <div>
+          <label for="validity" class="small">Validity (by B.S. date)</label>
+          <select id="validity">
+            <option value="">Any</option>
+            <option value="valid">Still valid</option>
+            <option value="soon">Ends within 1 year</option>
+            <option value="expired">Date passed</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="block results" aria-labelledby="h-res">
+      <div class="res-head">
+        <h2 id="h-res" class="label">Results</h2>
+        <div class="actions">
+          <button id="copy-csv" class="ghost" type="button">Copy CSV</button>
+          <button id="dl-csv" class="ghost" type="button">Download CSV</button>
+        </div>
+      </div>
+      <p id="summary" class="summary" aria-live="polite">Loading data…</p>
+      <div id="bytype" class="bytype"></div>
+      <ol id="list" class="list"></ol>
+      <p id="more" class="hint" hidden></p>
+    </section>
+
+    <details class="block layers">
+      <summary class="label">Map layers</summary>
+      <div class="stack">
+        <label for="basemap" class="small">Background</label>
+        <select id="basemap">
+          <option value="topo">Topographic</option>
+          <option value="sat">Satellite</option>
+          <option value="light">Plain</option>
+        </select>
+        <label class="check"><input id="lyr-ll" type="checkbox" checked> Municipality boundaries</label>
+        <label class="check"><input id="lyr-dist" type="checkbox"> District boundaries</label>
+        <label class="check"><input id="lyr-chure" type="checkbox"> Chure (Siwalik) area</label>
+        <label class="check"><input id="lyr-parks" type="checkbox"> National parks &amp; buffer zones</label>
+        <label class="check"><input id="lyr-topo" type="checkbox"> Topo sheets (1:25,000)</label>
+        <label class="check"><input id="lyr-ktft" type="checkbox"> Kathmandu–Terai Fast Track</label>
+      </div>
+    </details>
+
+    <footer class="foot">
+      Source: <a href="http://gis.dmgnepal.gov.np" target="_blank" rel="noopener">gis.dmgnepal.gov.np</a>.
+      Only data DMG publishes; expiry is judged from the B.S. end date, not DMG's own status.
+    </footer>
+  </aside>
+
+  <main class="mapwrap">
+    <div id="map" aria-label="Map"></div>
+    <div class="legend" id="legend" aria-label="Legend"></div>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/6.5.0/turf.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
