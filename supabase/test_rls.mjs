@@ -76,6 +76,31 @@ ok(r.rows?.length === 0, "C cannot remove the owner");
 r = await as(A, "a@x.np", `delete from production where company_id = $1 returning id`, [ca]);
 ok(r.rows?.length === 1, "A (owner) can delete a record");
 
+// parties and entries (khata)
+r = await as(A, "a@x.np", `insert into parties (company_id, kind, name, opening_balance) values ($1, 'buyer', 'Shree Crusher', 5000) returning id`, [ca]);
+ok(!r.error, `A adds a buyer ${r.error || ""}`);
+const pa = r.rows[0].id;
+r = await as(A, "a@x.np", `insert into entries (company_id, kind, entry_date, party_id, mineral, unit, quantity, rate, amount, paid_now, mode)
+  values ($1, 'sale', '2026-10-20', $2, 'Dolomite', 'tonne', 100, 1200, 120000, 20000, 'cash')`, [ca, pa]);
+ok(!r.error, `A records a credit sale ${r.error || ""}`);
+r = await as(A, "a@x.np", `insert into entries (company_id, kind, entry_date, party_id, amount, mode) values ($1, 'payment_in', '2026-10-25', $2, 50000, 'bank')`, [ca, pa]);
+ok(!r.error, `A records money received ${r.error || ""}`);
+r = await as(A, "a@x.np", `select p.opening_balance
+    + coalesce(sum(case when e.kind = 'sale' then e.amount - e.paid_now
+                        when e.kind = 'payment_in' then -e.amount
+                        when e.kind in ('purchase', 'expense') then -(e.amount - e.paid_now)
+                        when e.kind = 'payment_out' then e.amount end), 0) as balance
+  from parties p left join entries e on e.party_id = p.id where p.id = $1 group by p.id`, [pa]);
+ok(Number(r.rows?.[0]?.balance) === 55000, `buyer owes 5,000 + 100,000 - 50,000 = 55,000 (got ${r.rows?.[0]?.balance})`);
+r = await as(A, "a@x.np", `insert into entries (company_id, kind, entry_date, amount, paid_now) values ($1, 'sale', '2026-10-20', 100, 200)`, [ca]);
+ok(!!r.error, "paid now cannot exceed the bill");
+r = await as(B, "b@y.np", `select count(*)::int n from parties where company_id = $1`, [ca]);
+ok(r.rows?.[0]?.n === 0, "B cannot see Alpha's parties");
+r = await as(B, "b@y.np", `insert into entries (company_id, kind, entry_date, party_id, amount) values ($1, 'sale', '2026-10-20', $2, 10)`, [cb, pa]);
+ok(!!r.error, "B cannot attach its entry to Alpha's party");
+r = await as(B, "b@y.np", `select count(*)::int n from entries`);
+ok(r.rows?.[0]?.n === 0, "B sees no entries from Alpha");
+
 // signed-out (anon) sees nothing
 await db.exec(`reset role; select set_config('request.jwt.claim.sub','',false); set role anon;`);
 try { const x = await db.query(`select * from companies`); ok(x.rows.length === 0, "anon sees no companies"); }

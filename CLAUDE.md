@@ -7,7 +7,7 @@ CLI (`uv run dmg-gis …`) that scrapes the public DMG Nepal GIS portal and expo
 - Business figures exclude Rokka (DMG reserve areas, huge, no holder); keep that split when adding stats.
 - Licence-type colours are a validated categorical palette in fixed order (`TYPE_COLORS` in app.js); don't reorder or add hues.
 - Law content: `web/law.json` (hand-written from the official texts; every item cites section/rule) rendered by `web/law.js` (Law page + `lawChecklist(p)` on licence pages). `enrich.law_dates()` puts the next royalty and renewal deadlines (B.S.) into `meta.json`. Never add a legal claim without checking the official text.
-- Accounts/hisab: `web/account.js` + Supabase (`supabase/schema.sql` with RLS; `supabase/test_rls.mjs` tests it on PGlite). `web/config.js` holds only the project URL and anon key (empty = accounts off). Never commit a service_role key. B.S. month starts come from `web/data/bs_calendar.json` (built by `dmg-gis web`).
+- Accounts: `web/account.js`; khata-style hisab: `web/hisab.js` (parties, entries, stock, royalty, filings, reports; balances: + party owes us). Supabase (`supabase/schema.sql` with RLS; `supabase/test_rls.mjs` tests it on PGlite). `web/config.js` holds only the project URL and anon key (empty = accounts off). Never commit a service_role key. B.S. month starts come from `web/data/bs_calendar.json` (built by `dmg-gis web`).
 - `.github/workflows/pages.yml` rebuilds and deploys to GitHub Pages weekly and on push.
 - `data/`, `output/` and `web/data/` are gitignored; regenerate with `download` then `export` / `area`.
 - Portal quirks to keep in mind:

@@ -33,7 +33,7 @@ jobs:
       - name: Version script and style links so browsers fetch the new build
         run: |
           V="${GITHUB_SHA::7}-${GITHUB_RUN_NUMBER}"
-          sed -i -E "s#(src=\"(app|law|views|account|config)\.js)\"#\1?v=$V\"#g; s#(href=\"style\.css)\"#\1?v=$V\"#" web/index.html
+          sed -i -E "s#(src=\"(app|law|views|account|hisab|config)\.js)\"#\1?v=$V\"#g; s#(href=\"style\.css)\"#\1?v=$V\"#" web/index.html
           grep -o '?v=[^"]*' web/index.html | sort -u
       - uses: actions/upload-pages-artifact@v3
         with:

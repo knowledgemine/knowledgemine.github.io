@@ -88,17 +88,43 @@ create table if not exists public.royalty_payments (
   created_at timestamptz not null default now()
 );
 
-create table if not exists public.expenses (
+-- buyers, suppliers and workers, like a party ledger in a khata app
+create table if not exists public.parties (
   id uuid primary key default gen_random_uuid(),
   company_id uuid not null references public.companies on delete cascade,
-  licence_no text,
-  spent_on date not null,
-  category text not null check (category in ('wages', 'fuel', 'machinery', 'explosives', 'transport',
-    'fees_taxes', 'land_rent', 'environment', 'office', 'other')),
-  amount numeric not null check (amount >= 0),
+  kind text not null check (kind in ('buyer', 'supplier', 'worker', 'other')),
+  name text not null check (length(trim(name)) between 1 and 200),
+  phone text,
+  address text,
+  pan text,
+  opening_balance numeric not null default 0,      -- + they owe us, - we owe them
   note text,
   created_by uuid default auth.uid() references auth.users on delete set null,
   created_at timestamptz not null default now()
+);
+
+-- every money movement: sale, purchase, expense, money received, money paid
+create table if not exists public.entries (
+  id uuid primary key default gen_random_uuid(),
+  company_id uuid not null references public.companies on delete cascade,
+  kind text not null check (kind in ('sale', 'purchase', 'expense', 'payment_in', 'payment_out')),
+  entry_date date not null,
+  party_id uuid references public.parties on delete set null,
+  licence_no text,
+  mineral text,                                      -- sales: what was sold (reduces stock)
+  unit text check (unit is null or unit in ('tonne', 'm3', 'kg', 'gram', 'm2')),
+  quantity numeric check (quantity is null or quantity >= 0),
+  rate numeric check (rate is null or rate >= 0),
+  amount numeric not null check (amount >= 0),      -- bill total, or payment amount
+  paid_now numeric not null default 0 check (paid_now >= 0),  -- part of a sale/purchase/expense settled at once
+  mode text not null default 'cash' check (mode in ('cash', 'bank', 'cheque', 'wallet', 'credit')),
+  category text check (category is null or category in ('wages', 'fuel', 'machinery', 'explosives', 'transport',
+    'fees_taxes', 'land_rent', 'environment', 'office', 'other')),
+  bill_no text,
+  note text,
+  created_by uuid default auth.uid() references auth.users on delete set null,
+  created_at timestamptz not null default now(),
+  check (paid_now <= amount)
 );
 
 -- renewals, annual reports, environmental approvals, extensions ...
@@ -118,7 +144,9 @@ create table if not exists public.filings (
 
 create index if not exists production_company_month on public.production (company_id, bs_month);
 create index if not exists royalty_company_month on public.royalty_payments (company_id, bs_month);
-create index if not exists expenses_company_date on public.expenses (company_id, spent_on);
+create index if not exists entries_company_date on public.entries (company_id, entry_date);
+create index if not exists entries_party on public.entries (party_id);
+create index if not exists parties_company on public.parties (company_id);
 create index if not exists filings_company on public.filings (company_id, licence_no);
 
 -- ---------------------------------------------------------------- helpers (run as table owner)
@@ -165,6 +193,18 @@ end $$;
 revoke all on function public.accept_invites() from public, anon;
 grant execute on function public.accept_invites() to authenticated;
 
+create or replace function public.check_entry_party() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if new.party_id is not null and not exists (select 1 from parties where id = new.party_id and company_id = new.company_id) then
+    raise exception 'party belongs to another company';
+  end if;
+  return new;
+end $$;
+drop trigger if exists entries_check_party on public.entries;
+create trigger entries_check_party before insert or update on public.entries
+  for each row execute function public.check_entry_party();
+
 -- ---------------------------------------------------------------- row level security
 alter table public.profiles enable row level security;
 alter table public.companies enable row level security;
@@ -173,7 +213,8 @@ alter table public.company_invites enable row level security;
 alter table public.company_licences enable row level security;
 alter table public.production enable row level security;
 alter table public.royalty_payments enable row level security;
-alter table public.expenses enable row level security;
+alter table public.parties enable row level security;
+alter table public.entries enable row level security;
 alter table public.filings enable row level security;
 
 drop policy if exists "own profile" on public.profiles;
@@ -212,7 +253,7 @@ create policy "admins manage invites" on public.company_invites for all to authe
 do $$
 declare t text;
 begin
-  foreach t in array array['company_licences', 'production', 'royalty_payments', 'expenses', 'filings'] loop
+  foreach t in array array['company_licences', 'production', 'royalty_payments', 'parties', 'entries', 'filings'] loop
     execute format('drop policy if exists "members read" on public.%I', t);
     execute format('create policy "members read" on public.%I for select to authenticated using (public.is_member(company_id))', t);
     execute format('drop policy if exists "members add" on public.%I', t);

@@ -271,11 +271,77 @@ a.btn:not(.ghost) { color: var(--accent-ink); }
 #hisab-out { display: flex; flex-direction: column; gap: 14px; }
 #hb-body { display: flex; flex-direction: column; gap: 14px; }
 #acc-out { display: flex; flex-direction: column; gap: 14px; }
+/* ---------- khata (hisab) ---------- */
+.np { font-size: 0.82em; color: var(--muted); font-weight: 500; }
+.t-recv { color: var(--ok); }
+.t-pay { color: var(--bad); }
+.hb-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.hb-tabs .chip { flex: none; font-size: 13.5px; padding: 6px 12px; }
+.khata-top { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.khata-top.single { grid-template-columns: minmax(0, 320px); }
+.khata-card { display: flex; flex-direction: column; gap: 2px; text-align: left; border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 16px; background: var(--panel); color: var(--ink); cursor: pointer; font: inherit; min-width: 0; }
+div.khata-card { cursor: default; }
+.khata-card .np { font-size: 14px; font-weight: 600; }
+.khata-card .lbl { font-size: 12.5px; color: var(--muted); }
+.khata-card b { font-family: var(--font-display); font-stretch: 85%; font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.khata-card.recv { border-color: var(--ok); background: var(--ok-bg); } .khata-card.recv b, .khata-card.recv .np { color: var(--ok); }
+.khata-card.pay { border-color: var(--bad); background: var(--bad-bg); } .khata-card.pay b, .khata-card.pay .np { color: var(--bad); }
+.quick { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.qbtn { display: flex; flex-direction: column; align-items: center; gap: 2px; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+  border-radius: 10px; padding: 10px 4px; cursor: pointer; font: inherit; font-size: 12.5px; font-weight: 600; min-height: 60px; justify-content: center; }
+.qbtn .np { font-size: 13px; }
+.qbtn:hover { border-color: var(--accent); }
+.q-sale, .q-payment_in { border-bottom: 3px solid var(--ok); }
+.q-purchase, .q-expense, .q-payment_out { border-bottom: 3px solid var(--bad); }
+.q-prod { border-bottom: 3px solid var(--s1); }
+.kpis.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.seg.entry-kinds { grid-template-columns: repeat(5, 1fr); margin-bottom: 4px; }
+.entry-kinds .seg-btn { display: flex; flex-direction: column; align-items: center; line-height: 1.2; padding: 7px 2px; }
+.entry-kinds .seg-btn small { font-size: 11px; opacity: 0.8; }
+.newparty { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px 14px; background: var(--bg); border-radius: 8px; padding: 10px; }
+.newparty > div { display: flex; flex-direction: column; gap: 4px; }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.filters select { width: auto; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); font: inherit; font-size: 13px; }
+.daybook { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.db-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; grid-template-areas: "date main amt" "date main act"; gap: 2px 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--grid); align-items: start; }
+.db-date { grid-area: date; font-family: var(--font-mono); font-size: 13px; font-weight: 500; display: flex; flex-direction: column; }
+.db-date small { color: var(--muted); font-size: 11px; }
+.db-main { grid-area: main; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; min-width: 0; }
+.db-main .sub { flex-basis: 100%; color: var(--muted); font-size: 12.5px; overflow-wrap: anywhere; }
+.db-amt { grid-area: amt; font-family: var(--font-mono); font-weight: 500; text-align: right; white-space: nowrap; }
+.db-act { grid-area: act; display: flex; gap: 10px; justify-content: flex-end; }
+.kpill { border-color: transparent; background: var(--bg); color: var(--ink-2); }
+.k-sale .kpill, .k-payment_in .kpill { background: var(--ok-bg); color: var(--ok); }
+.k-purchase .kpill, .k-expense .kpill, .k-payment_out .kpill { background: var(--bad-bg); color: var(--bad); }
+.parties { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.party-row { width: 100%; display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 10px 4px; border: 0;
+  border-bottom: 1px solid var(--grid); background: transparent; color: var(--ink); cursor: pointer; font: inherit; text-align: left; }
+.party-row:hover { background: var(--bg); }
+.pr-name { display: flex; flex-direction: column; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+.pr-name small, .pr-bal small { font-size: 11.5px; color: var(--muted); font-weight: 400; }
+.pr-bal { display: flex; flex-direction: column; align-items: flex-end; font-family: var(--font-mono); font-weight: 500; white-space: nowrap; }
+.stockchips { display: flex; flex-wrap: wrap; gap: 8px; }
+.stockchip { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; min-width: 120px; }
+.stockchip b { font-family: var(--font-display); font-stretch: 85%; font-size: 18px; }
+.linkbtn.danger { color: var(--bad); }
+.tbl tr.total td { border-top: 2px solid var(--line); }
+#print-area { display: none; }
 @media print {
-  .topbar, .bottomnav, .page-foot, .hisab-tabs, .hisab-head, .intro, #hb-body > :not(#hb-annual-out), .ghost { display: none !important; }
-  body { background: #fff; color: #000; padding: 0; }
-  .card { border: 0; }
+  body.printing > *:not(#print-area) { display: none !important; }
+  body.printing #print-area { display: block; }
+  body { background: #fff !important; color: #000 !important; padding: 0 !important; }
 }
+.bill { font: 13px/1.5 var(--font-body); color: #000; max-width: 720px; margin: 0 auto; padding: 24px; }
+.bill-head { display: flex; justify-content: space-between; gap: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 14px; }
+.bill h1 { font-family: var(--font-display); font-size: 24px; margin: 0; }
+.bill-head p { margin: 2px 0 0; }
+.bill-meta { text-align: right; }
+.bill table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.bill th, .bill td { border-bottom: 1px solid #999; padding: 6px 4px; text-align: left; }
+.bill .num { text-align: right; }
+.bill-foot { margin-top: 30px; font-size: 11px; color: #555; }
 
 /* ---------- map view ---------- */
 body.is-map { height: 100%; overflow: hidden; }
@@ -374,7 +440,9 @@ body.is-map .page-foot { display: none; }
   .logo { font-size: 20px; }
   .asof { display: none; }
   .acc-link { margin-left: auto; }
-  .hisab-tabs .seg-btn { font-size: 12px; padding-inline: 2px; }
+  .quick { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .khata-card b { font-size: 22px; }
+  .entry-kinds .seg-btn { font-size: 11.5px; }
   .bottomnav {
     display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000;
     background: var(--panel); border-top: 1px solid var(--line);

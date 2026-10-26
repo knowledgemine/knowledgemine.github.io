@@ -71,12 +71,20 @@ Notes on the numbers:
 - Holders are grouped by a cleaned company name, so spelling variants may still split one company.
 - Map tiles load from Esri and CARTO, so the background needs internet.
 
-**Account and Hisab-kitab** (`#account`, `#hisab`): sign in with email, create a company, invite staff, and keep
-the company's licences in sync across devices. For each licence: monthly production and mine-gate quantity,
-royalty due (Schedule 10 rate, editable) plus the 10% local development fee, due dates and late surcharge
-(rule 21), payments and vouchers, expenses, filings (renewal, annual report, BES/IEE/EIA), a yearly summary
-with unpaid-royalty warnings, and a Schedule 9-style annual production report. Runs on Supabase; off until
-`web/config.js` is filled in. Setup: [supabase/SETUP.md](supabase/SETUP.md).
+**Account and Hisab-kitab** (`#account`, `#hisab`): sign in with email, create a company, invite staff
+(owner / admin / staff), and keep the company's licences in sync across devices. Hisab-kitab works like a
+Nepali khata app (inspired by Karobar) with mining built in:
+- **Parties**: buyers (crushers, factories, contractors), suppliers, workers, each with a running ledger,
+  पाउनु पर्ने / दिनु पर्ने balances, a WhatsApp reminder and a printable statement
+- **Entries**: sale (mineral, quantity, rate, cash or credit, printable bill), purchase, expense by category,
+  money in, money out; a day book by month
+- **Stock**: production by licence and month; sales reduce stock
+- **Royalty**: due from mine-gate quantity × Schedule 10 rate + 10% local fee, B.S. due dates, automatic
+  10 / 20 / 30% late surcharge (rule 21), unpaid-month warnings
+- **Filings**: renewal, annual report, BES/IEE/EIA, extension, with a yearly checklist
+- **Reports**: profit and loss, cash flow, receivables and payables, Schedule 9-style annual production report,
+  CSV downloads
+Runs on Supabase; off until `web/config.js` is filled in. Setup: [supabase/SETUP.md](supabase/SETUP.md).
 
 ### Publishing for operators
 
