@@ -49,8 +49,9 @@ const FILES = ["mining_licences", "local_levels", "districts", "topo_sheets", "c
   "national_parks_new", "national_parks_conservation", "ktft_alignment"];
 
 async function loadData() {
-  const [meta, ...layers] = await Promise.all([
+  const [meta, , ...layers] = await Promise.all([
     fetch("data/meta.json").then((r) => r.json()).catch(() => ({})),
+    fetch("law.json").then((r) => r.json()).then((j) => (D.law = j)).catch(() => (D.law = null)),
     ...FILES.map((f) => fetch(`data/${f}.geojson`).then((r) => {
       if (!r.ok) throw new Error(`data/${f}.geojson missing`);
       return r.json();

@@ -1,0 +1,370 @@
+{
+  "checked": "2026-10-26",
+  "status_note": "Based on the Mines and Minerals Act 2042 and Mines and Minerals Rules 2056 as published by DMG and the Law Commission (Rules amended up to the 4th amendment, 2073). A new Mines and Minerals Bill 2083 is in Parliament and is not yet law; when it passes, these duties may change. Royalty rates and fees can be revised by notice in the Nepal Gazette.",
+  "sources": [
+    { "id": "act", "title": "Mines and Minerals Act, 2042 (1985)", "np": "खानी तथा खनिज पदार्थ ऐन, २०४२",
+      "url": "https://dmgnepal.gov.np/uploads/documents/mines-and-minerals-act-2042-1985pdf-0861-673-1693293328.pdf" },
+    { "id": "rules", "title": "Mines and Minerals Rules, 2056 (1999)", "np": "खानी तथा खनिज पदार्थ नियमावली, २०५६",
+      "url": "https://dmgnepal.gov.np/uploads/documents/खानी-तथा-खनिज-पदार्थ-नियमावली-२०५६pdf-7194-866-1687671528.pdf" },
+    { "id": "epa", "title": "Environment Protection Act, 2076 (2019)", "np": "वातावरण संरक्षण ऐन, २०७६",
+      "url": "https://dmgnepal.gov.np/uploads/documents/वातावरण-संरक्षण-ऐन-२०७६pdf-3049-310-1688105548.pdf" },
+    { "id": "epr", "title": "Environment Protection Rules, 2077 (2020)", "np": "वातावरण संरक्षण नियमावली, २०७७",
+      "url": "https://dmgnepal.gov.np/uploads/documents/वातावरण-संरक्षण-नियमावली-२०७७pdf-5175-410-1688105696.pdf" },
+    { "id": "lgoa", "title": "Local Government Operation Act, 2074 (2017)", "np": "स्थानीय सरकार सञ्चालन ऐन, २०७४",
+      "url": "https://lawcommission.gov.np/" },
+    { "id": "dmg", "title": "DMG: Acts and Regulations page", "np": "खानी तथा भूगर्भ विभाग",
+      "url": "https://dmgnepal.gov.np/ne/resources/acts-and-regulations-3417" }
+  ],
+  "topics": [
+    {
+      "id": "renewal",
+      "title": "Renewal every year",
+      "items": [
+        {
+          "id": "annual-renewal",
+          "applies": ["prospecting", "mining"],
+          "title": "Renew the licence every fiscal year",
+          "when": "Within 3 months after each fiscal year ends, i.e. by the end of Ashwin.",
+          "do": "Apply to DMG and pay the renewal fee. Licences for ordinary construction materials were renewed by the District Development Committee under the Rules; those are now handled by the municipality (see Construction materials).",
+          "law": [["act", "Section 7"], ["rules", "Rule 42(1)–(3)"]],
+          "fees": "Renewal fee (Schedule 4): prospecting Rs 37,500 / 25,000 / 12,500 for very important / important and precious / ordinary minerals; mining Rs 25,000 / 50,000 / 75,000 / 1,00,000 for very small / small / medium / large scale.",
+          "ifnot": "The licence is cancelled if it is not renewed.",
+          "ifnot_law": [["rules", "Rule 43(ga)"]]
+        }
+      ]
+    },
+    {
+      "id": "reports",
+      "title": "Reports to DMG",
+      "items": [
+        {
+          "id": "annual-report",
+          "applies": ["prospecting", "mining"],
+          "title": "Annual production and business report",
+          "when": "Within 3 months after each fiscal year ends, i.e. by the end of Ashwin.",
+          "do": "Submit the annual production progress report (Schedule 9) and details of: mineral reserves, production and sales, machinery, staff and workers, and costs, income and expenses.",
+          "law": [["act", "Section 20"], ["rules", "Rule 45(2)–(3)"]],
+          "ifnot": "DMG can stop your mining work until the reports are submitted, and the licence can be cancelled for reports not filed on time.",
+          "ifnot_law": [["act", "Section 25(3)"], ["rules", "Rule 43(gha2)"]]
+        },
+        {
+          "id": "prospecting-report",
+          "applies": ["prospecting"],
+          "title": "Prospecting progress report every 5 months",
+          "when": "Every five months during the prospecting licence.",
+          "do": "Submit the prospecting progress report in the format of Schedule 6 (sampling, trenches, drilling, tests, grade and tonnage, costs).",
+          "law": [["rules", "Rule 45(1)"]],
+          "ifnot": "Mining work can be stopped until submitted, and the licence can be cancelled.",
+          "ifnot_law": [["act", "Section 25(3)"], ["rules", "Rule 43(gha2)"]]
+        },
+        {
+          "id": "public-damage",
+          "applies": ["prospecting", "mining"],
+          "title": "Report damage to public property at once",
+          "when": "Immediately, by the fastest means.",
+          "do": "If mining damages, or may damage, public property, take protective measures and send DMG full details.",
+          "law": [["rules", "Rule 45(4)"]],
+          "ifnot": "Treated as breaking the Rules: fine up to Rs 1 lakh or licence cancellation.",
+          "ifnot_law": [["act", "Section 25(4)"], ["rules", "Rule 43(nga)"]]
+        }
+      ]
+    },
+    {
+      "id": "royalty",
+      "title": "Royalty and fees",
+      "items": [
+        {
+          "id": "monthly-royalty",
+          "applies": ["mining"],
+          "title": "Pay royalty every month",
+          "when": "Deposit within 7 days after each month ends; submit the deposit voucher with the monthly production details within 15 days.",
+          "do": "Royalty is due on every quantity taken out through the mine gate, at the Schedule 10 rate, paid into DMG's revenue account.",
+          "law": [["act", "Section 18"], ["rules", "Rule 21(1)–(2)"]],
+          "fees": "Examples from Schedule 10 (2072 gazette revision): limestone Rs 60/tonne, dolomite Rs 50/tonne, calcite Rs 60/tonne, ordinary building stone Rs 25/m³, aggregate (roda) Rs 60/m³, sand Rs 20/m³, gravel Rs 15/m³, granite/marble block Rs 2,140/m³, copper Rs 5/kg of metal, iron Rs 40/tonne of metal, gold Rs 100/gram. Minerals not listed: about 5% of market price.",
+          "ifnot": "Late royalty costs extra: +10% if paid within 3 months of the deadline, +20% within 6 months, +30% within 1 year. Not paying on time is a ground for cancelling the licence.",
+          "ifnot_law": [["rules", "Rule 21(3)"], ["rules", "Rule 43(gha1)"]]
+        },
+        {
+          "id": "local-fee",
+          "applies": ["mining"],
+          "title": "Local development fee: 10% of royalty",
+          "when": "Each time royalty is due.",
+          "do": "Pay a local development fee equal to 10% of the royalty. The Rules name the District Development Committee as the recipient; confirm the current receiving office with DMG.",
+          "law": [["act", "Section 19"], ["rules", "Rule 22"]],
+          "ifnot": "Unpaid fees are a ground for cancelling the licence.",
+          "ifnot_law": [["rules", "Rule 43(gha1)"]]
+        },
+        {
+          "id": "land-rent",
+          "applies": ["prospecting", "mining"],
+          "title": "Land rent for government land",
+          "when": "Every year.",
+          "do": "If the licence area is government land, pay annual land rent: Rs 5,000 per km² in year 1, rising by Rs 5,000 each year to Rs 30,000 per km² from year 6 (counting continues from prospecting into mining). On private land, a written lease agreement with the owner must be filed with the application, and the agreed rent paid to the owner.",
+          "law": [["act", "Section 21(1)"], ["rules", "Rule 46"], ["rules", "Schedule 14"]],
+          "ifnot": "Unpaid land rent is a ground for cancelling the licence.",
+          "ifnot_law": [["rules", "Rule 43(gha1)"]]
+        },
+        {
+          "id": "deposit",
+          "applies": ["prospecting", "mining"],
+          "title": "Keep the security deposit",
+          "when": "While the licence runs.",
+          "do": "A deposit is required: prospecting Rs 1,50,000 / 1,00,000 / 50,000 by mineral class; mining Rs 1,00,000 / 2,00,000 / 3,00,000 / 4,00,000 by scale.",
+          "law": [["rules", "Rule 53B"], ["rules", "Schedule 4"]],
+          "ifnot": "Breaking a condition of the Rules: fine up to Rs 1 lakh or licence cancellation.",
+          "ifnot_law": [["act", "Section 25(4)"], ["rules", "Rule 43(nga)"]]
+        }
+      ]
+    },
+    {
+      "id": "term",
+      "title": "Starting work, term and extension",
+      "items": [
+        {
+          "id": "collect-licence",
+          "applies": ["pending"],
+          "title": "Collect the licence within 30 days",
+          "when": "Within 30 days of DMG's notice that the licence has been approved.",
+          "do": "Collect the licence in person or through a representative.",
+          "law": [["rules", "Rule 7(2)"], ["rules", "Rule 15(2)"]],
+          "ifnot": "The licence is cancelled automatically.",
+          "ifnot_law": [["rules", "Rule 7(3)"], ["rules", "Rule 15(3)"], ["rules", "Rule 43(kha)"]]
+        },
+        {
+          "id": "start-prospecting",
+          "applies": ["prospecting"],
+          "title": "Start prospecting within 6 months",
+          "when": "Within 6 months of receiving the licence.",
+          "do": "If special circumstances prevent this, apply to DMG with reasons before the 6 months end; DMG may allow up to 90 more days.",
+          "law": [["rules", "Rule 10(1)"], ["rules", "Rule 10(3)"]],
+          "ifnot": "DMG can cancel the prospecting licence.",
+          "ifnot_law": [["rules", "Rule 10(2)"]]
+        },
+        {
+          "id": "start-mining",
+          "applies": ["mining"],
+          "title": "Start mining within 2 years",
+          "when": "Within 2 years of receiving the mining licence.",
+          "do": "If special circumstances prevent this, apply at least 3 months before the 2 years end; DMG may allow up to 1 more year.",
+          "law": [["act", "Section 11(1)"], ["rules", "Rule 18(1)"], ["rules", "Rule 18(3)"]],
+          "ifnot": "DMG can cancel the mining licence.",
+          "ifnot_law": [["rules", "Rule 18(2)"]]
+        },
+        {
+          "id": "prospecting-term",
+          "applies": ["prospecting"],
+          "title": "Finish prospecting within the term, or apply early for more time",
+          "when": "Term: 4 years for very important and for important and precious minerals, 2 years for ordinary minerals. Apply for extension at least 3 months before it ends.",
+          "do": "Apply with the progress report (Schedule 6). DMG may extend by up to 1 year at a time, 2 years at most, for the extension fee in Schedule 4.",
+          "law": [["rules", "Rule 9(1)–(3)"]],
+          "ifnot": "The licence ends when its period ends.",
+          "ifnot_law": [["rules", "Rule 43(cha)"]]
+        },
+        {
+          "id": "prospecting-to-mining",
+          "applies": ["prospecting"],
+          "title": "Apply for the mining licence before prospecting ends",
+          "when": "Before the prospecting period expires.",
+          "do": "A prospecting licensee has the right to a mining licence for the same mineral and area, but must apply before expiry with a detailed prospecting report and a proposed mining plan (Schedule 7).",
+          "law": [["act", "Section 5(4)"], ["act", "Section 6(1)"], ["rules", "Rule 14(2)"]],
+          "ifnot": "After expiry the licence ends and that priority right is not protected.",
+          "ifnot_law": [["rules", "Rule 43(cha)"]]
+        },
+        {
+          "id": "mining-term",
+          "applies": ["mining"],
+          "title": "Mining term and extension",
+          "when": "Term: 10 / 15 / 20 / 30 years for very small / small / medium / large scale (cement-grade limestone: 15 years very small, 20 years small). Apply for extension at least 3 months before it ends.",
+          "do": "Apply with the annual production progress report (Schedule 9). DMG may extend by up to 1 / 2 / 5 / 10 years by scale. If reserves remain after the term, apply for an additional mining licence with a new mining plan (Schedule 7A).",
+          "law": [["act", "Section 10"], ["rules", "Rule 17(1)–(5)"]],
+          "ifnot": "The licence ends when its period ends. Mining after that is mining without a licence.",
+          "ifnot_law": [["rules", "Rule 43(cha)"], ["act", "Section 25(1)"]]
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "title": "Rules on site",
+      "items": [
+        {
+          "id": "distances",
+          "applies": ["mining"],
+          "title": "Keep the legal distances",
+          "when": "Always.",
+          "do": "No excavation within 50 m of protected public places: monuments, cremation sites, public roads, ghats, dams and canals, pipelines, forts, temples, mosques, churches, houses, factories and similar. Do not build houses, factories or stores there. Do not mine outside the licensed boundary; where two licence areas touch, leave 25 m from the shared boundary.",
+          "law": [["rules", "Rule 19(ga)"], ["rules", "Rule 19(cha)"]],
+          "ifnot": "Breaking licence conditions: fine up to Rs 1 lakh or cancellation; DMG can also order the work stopped.",
+          "ifnot_law": [["act", "Section 25(4)"], ["act", "Section 13"], ["rules", "Rule 43(nga)"]]
+        },
+        {
+          "id": "site-office",
+          "applies": ["mining"],
+          "title": "Site office, boundary and supervision",
+          "when": "Always.",
+          "do": "Set up an office at the mine with the licence clearly displayed; mark the licence boundary at your own cost; the licensee or a representative must be present to supervise; keep suitable measuring equipment where minerals are stored; let neighbouring licensees use your tramline, ropeway, road and water point on reasonable terms.",
+          "law": [["rules", "Rule 19(gha)"], ["rules", "Rule 19(nga)"], ["rules", "Rule 19(jha)"], ["rules", "Rule 19(nya)"], ["rules", "Rule 19(ta)"]],
+          "ifnot": "Breaking licence conditions: fine up to Rs 1 lakh or cancellation.",
+          "ifnot_law": [["act", "Section 25(4)"], ["rules", "Rule 43(nga)"]]
+        },
+        {
+          "id": "safety",
+          "applies": ["mining"],
+          "title": "Safety and accident reporting",
+          "when": "Immediately after any accident.",
+          "do": "Make pits, tunnels and openings safe. If there is an accident, a death, or damage (or risk of damage) to anyone's property in the licence area, inform the District Administration Office and DMG immediately. In mines with toxic gas or heavy dust, workers must use gas filters or dust masks.",
+          "law": [["rules", "Rule 19(chha)"], ["rules", "Rule 19(ja)"], ["rules", "Rule 33(nga)"]],
+          "ifnot": "Breaking licence conditions: fine up to Rs 1 lakh or cancellation; compensation for damage can also be recovered.",
+          "ifnot_law": [["act", "Section 25(2)"], ["act", "Section 25(4)"]]
+        },
+        {
+          "id": "stoppage",
+          "applies": ["mining"],
+          "title": "Tell DMG if work stops for over a month",
+          "when": "When work is stopped for more than 1 month by circumstances beyond your control.",
+          "do": "Notify DMG.",
+          "law": [["rules", "Rule 19(tha)"]],
+          "ifnot": "Breaking licence conditions: fine up to Rs 1 lakh or cancellation.",
+          "ifnot_law": [["act", "Section 25(4)"], ["rules", "Rule 43(nga)"]]
+        },
+        {
+          "id": "other-minerals",
+          "applies": ["prospecting", "mining"],
+          "title": "Report other minerals found within 30 days",
+          "when": "Within 30 days of finding a mineral not named in the licence.",
+          "do": "Notify DMG; you then get priority for a licence for that mineral (apply within 30 days of notifying). Selling another mineral or a by-product needs DMG's prior approval and royalty.",
+          "law": [["act", "Section 6(2)"], ["rules", "Rule 44(1)–(2)"], ["rules", "Rule 47"]],
+          "ifnot": "You lose the priority right to that mineral.",
+          "ifnot_law": [["rules", "Rule 44(3)(ka)"]]
+        },
+        {
+          "id": "prospecting-conditions",
+          "applies": ["prospecting"],
+          "title": "Prospecting conditions",
+          "when": "During and after prospecting.",
+          "do": "Do not damage houses, land, trees or crops; report archaeological finds to the District Administration Office and DMG; within 30 days after finishing, fence or wall off pits and trenches where needed; remove all equipment within 180 days after the term ends. Minerals found while prospecting may not be sold.",
+          "law": [["rules", "Rule 11"]],
+          "ifnot": "Breaking licence conditions: fine up to Rs 1 lakh or cancellation.",
+          "ifnot_law": [["act", "Section 25(4)"], ["rules", "Rule 43(nga)"]]
+        },
+        {
+          "id": "transfer",
+          "applies": ["prospecting", "mining"],
+          "title": "Transferring the licence needs DMG approval",
+          "when": "Before any change of licence holder.",
+          "do": "The new holder must meet the Rule 5 qualifications and apply to DMG; DMG decides within 30 days and charges the transfer fee (Schedule 4). On a licensee's death, the nearest heir can apply.",
+          "law": [["rules", "Rule 53A"]],
+          "ifnot": "A transfer without approval is not allowed; breaking the Rules can bring a fine up to Rs 1 lakh or cancellation.",
+          "ifnot_law": [["act", "Section 25(4)"]]
+        },
+        {
+          "id": "inspection",
+          "applies": ["prospecting", "mining"],
+          "title": "Allow inspection",
+          "when": "Whenever an authorised inspector visits.",
+          "do": "Let DMG's inspector (mining engineer, geologist or expert) enter the site and provide documents and information. Inspectors can take samples, hold minerals and seal records. Environment inspectors have similar powers.",
+          "law": [["act", "Section 23"], ["rules", "Rule 50"], ["epa", "Section 22"]],
+          "ifnot": "Under the Environment Act, refusing or obstructing an inspection: fine up to Rs 20,000; withholding information or giving false details: up to Rs 15,000.",
+          "ifnot_law": [["epa", "Section 22(4)"]]
+        }
+      ]
+    },
+    {
+      "id": "environment",
+      "title": "Environment",
+      "items": [
+        {
+          "id": "env-study",
+          "applies": ["mining", "construction"],
+          "title": "Get the right environmental study approved before work",
+          "when": "Before starting, or expanding, extraction.",
+          "do": "Brief Environmental Study (BES): construction materials (stone, sand, gravel, industrial and ordinary soil) up to 50 m³/day. Initial Environmental Examination (IEE): construction materials 50–500 m³/day; metallic minerals up to 1,000 t/day underground or 2,000 t/day surface; non-metallic up to 2,000 t/day underground or 4,800 t/day surface; coal up to 1,000 / 2,000 t/day; relocating up to 100 people; river-bed sand and gravel 100–300 m³/day. Environmental Impact Assessment (EIA): above those limits, all radioactive minerals, relocating more than 100 people, river-bed extraction over 300 m³/day. Using forest or conservation-area land adds its own thresholds.",
+          "law": [["epr", "Rule 3"], ["epr", "Schedules 1–3"]],
+          "ifnot": "Working without the approved study, or against it: fine up to Rs 5 lakh (BES), Rs 10 lakh (IEE) or Rs 50 lakh (EIA). Work is stopped until it is approved or corrected; if the order is ignored, the fine triples, and the company can be blacklisted for 1–5 years.",
+          "ifnot_law": [["epa", "Section 35(1)–(5)"]]
+        },
+        {
+          "id": "env-measures",
+          "applies": ["prospecting", "mining"],
+          "title": "Protect the environment while working",
+          "when": "Always.",
+          "do": "Avoid significant harm to land, forests, wildlife, water and air. Required measures include: drainage and settling ponds, effluent treatment where needed, dust control, low-noise blasting, safe waste dumps with retaining walls and plants, storing topsoil separately and replanting with it after mining.",
+          "law": [["act", "Section 11A"], ["rules", "Rule 31"], ["rules", "Rule 32"], ["rules", "Rule 33"]],
+          "ifnot": "DMG issues correction orders. If they are not followed: work suspended or licence revoked, fine up to Rs 1 lakh, and compensation for damage.",
+          "ifnot_law": [["act", "Section 25(2)"]]
+        },
+        {
+          "id": "closure",
+          "applies": ["mining"],
+          "title": "Close and restore the site",
+          "when": "Within 6 months after the term ends or the licence is cancelled.",
+          "do": "Stop work, remove all equipment, fill pits and trenches, build fences or walls where needed, and restore the area.",
+          "law": [["rules", "Rule 19(da)"], ["rules", "Rule 33(nya)"]],
+          "ifnot": "DMG can recover compensation for damage and impose a fine up to Rs 1 lakh.",
+          "ifnot_law": [["act", "Section 25(2)"], ["act", "Section 25(4)"]]
+        }
+      ]
+    },
+    {
+      "id": "construction",
+      "title": "Construction materials (stone, sand, gravel)",
+      "items": [
+        {
+          "id": "local-level",
+          "applies": ["construction"],
+          "title": "The municipality manages stone, gravel, sand, soil and slate",
+          "when": "Before extracting or selling.",
+          "do": "Rural and urban municipalities handle registration, permits, renewal, cancellation and management of surveying, extraction and use of stone, gravel, sand, soil and slate, and can sell them within the quantity set by the approved EIA or IEE. Chapter 7 of the Mines Rules (rules 34–38) still names the District Development Committee for these licences; in practice ask your municipality and its procedure (karyabidhi).",
+          "law": [["lgoa", "Section 11(2)(pa)(7)"], ["lgoa", "Section 62A"], ["rules", "Rules 34–38"]],
+          "ifnot": "Extraction without a permit can be stopped and equipment seized; under the Mines Act, mining without a licence carries a fine up to Rs 1 lakh plus compensation.",
+          "ifnot_law": [["act", "Section 25(1)"]]
+        }
+      ]
+    },
+    {
+      "id": "penalties",
+      "title": "Penalties and cancellation at a glance",
+      "items": [
+        {
+          "id": "no-licence",
+          "applies": ["all"],
+          "title": "Mining without a licence",
+          "when": "",
+          "do": "The government can stop the work, seize machinery, equipment and the minerals, fine up to Rs 1 lakh, and recover compensation for damage.",
+          "law": [["act", "Section 25(1)"]],
+          "ifnot": "",
+          "ifnot_law": []
+        },
+        {
+          "id": "cancellation-grounds",
+          "applies": ["all"],
+          "title": "When a licence is cancelled",
+          "when": "",
+          "do": "(1) the holder gives it up; (2) not collected within 30 days; (3) not renewed; (4) acts harming public interest, national security or the environment; (5) royalty, fees or land rent not paid on time; (6) required reports not filed on time; (7) conditions of the Rules not followed; (8) the period ends. The government can also revoke a licence for national security or public interest, with compensation.",
+          "law": [["rules", "Rule 43"], ["act", "Section 27"]],
+          "ifnot": "",
+          "ifnot_law": []
+        },
+        {
+          "id": "hearing-appeal",
+          "applies": ["all"],
+          "title": "Your right to be heard and to appeal",
+          "when": "",
+          "do": "DMG must give you a chance to defend yourself before any penalty under section 25. You can appeal a penalty within 35 days. The Act names the Court of Appeal; Nepal's courts were restructured in 2073, so confirm the current court (High Court) with a lawyer. Environment Act fines are appealed to the District Court (if imposed by a local level) or the High Court.",
+          "law": [["act", "Section 25(5)"], ["act", "Section 25(7)"], ["epa", "Section 37"]],
+          "ifnot": "",
+          "ifnot_law": []
+        },
+        {
+          "id": "obstruction",
+          "applies": ["all"],
+          "title": "Obstructing lawful mining",
+          "when": "",
+          "do": "Anyone who obstructs mining by DMG or a licensee can be fined up to Rs 10,000, jailed up to 6 months, or both.",
+          "law": [["act", "Section 25(6)"]],
+          "ifnot": "",
+          "ifnot_law": []
+        }
+      ]
+    }
+  ]
+}

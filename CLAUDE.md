@@ -6,6 +6,7 @@ CLI (`uv run dmg-gis …`) that scrapes the public DMG Nepal GIS portal and expo
 - Web app "Khani Insights": `web/index.html`, `web/style.css`, `web/app.js` (shared data + Map view), `web/views.js` (Overview, Licence check, Holder, Mineral, hash router). Leaflet 1.9.4 + Turf 6.5.0 from cdnjs, no build step. `dmg-gis web` runs `enrich.py` (B.S.→A.D. dates via nepali-datetime, issue FY from licence no, Chure/park/Rokka overlaps, Fast Track distance, neighbour counts) and writes simplified layers to `web/data/`, then serves on :8765 (next free port if busy).
 - Business figures exclude Rokka (DMG reserve areas, huge, no holder); keep that split when adding stats.
 - Licence-type colours are a validated categorical palette in fixed order (`TYPE_COLORS` in app.js); don't reorder or add hues.
+- Law content: `web/law.json` (hand-written from the official texts; every item cites section/rule) rendered by `web/law.js` (Law page + `lawChecklist(p)` on licence pages). `enrich.law_dates()` puts the next royalty and renewal deadlines (B.S.) into `meta.json`. Never add a legal claim without checking the official text.
 - `.github/workflows/pages.yml` rebuilds and deploys to GitHub Pages weekly and on push.
 - `data/`, `output/` and `web/data/` are gitignored; regenerate with `download` then `export` / `area`.
 - Portal quirks to keep in mind:

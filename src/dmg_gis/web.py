@@ -7,7 +7,7 @@ from pathlib import Path
 
 import geopandas as gpd
 
-from .enrich import NEAR_KM, enrich, today_bs
+from .enrich import NEAR_KM, enrich, law_dates, today_bs
 
 # simplify tolerance in degrees (0.001° ≈ 100 m); keeps the page under ~10 MB
 SIMPLIFY = {"local_levels": 0.0006, "districts": 0.0015, "provinces": 0.003,
@@ -50,7 +50,7 @@ def build_web_data(layers: dict[str, gpd.GeoDataFrame], out: Path, downloaded: s
         g = g[~g.geometry.is_empty]
         _write(g, out / f"{name}.geojson")
         print(f"{name}: {len(g):,} features, {(out / f'{name}.geojson').stat().st_size / 1e6:.1f} MB")
-    (out / "meta.json").write_text(json.dumps({"downloaded": downloaded, "built_bs": today_bs(), "near_km": NEAR_KM}))
+    (out / "meta.json").write_text(json.dumps({"downloaded": downloaded, "built_bs": today_bs(), "near_km": NEAR_KM, "law_dates": law_dates()}))
 
 
 class _NoCache(http.server.SimpleHTTPRequestHandler):

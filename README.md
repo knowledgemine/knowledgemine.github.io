@@ -50,6 +50,15 @@ largest holders and their share of area, licences ending within 2 years, newest 
 
 **Map**: search a municipality or click a point, set a radius, filter, export CSV.
 
+**Law** (`#law`, or `#law=monthly-royalty` for one duty): what licence holders must do under the Mines and
+Minerals Act 2042, Mines and Minerals Rules 2056, Environment Protection Act 2076 / Rules 2077 and Local
+Government Operation Act 2074: what to do, when, the section or rule, and what happens if it isn't done,
+with links to the official PDFs. Key dates (royalty, renewal and annual report) are worked out from the B.S.
+calendar at each build. Each licence page also shows **What the law requires now**: extension deadline,
+start-work deadline for new licences, royalty and renewal dates, and Chure or national park reminders.
+The legal text lives in `web/law.json`; update its `checked` date whenever it is reviewed. It is a
+plain-language guide, not legal advice; the Mines and Minerals Bill 2083 may change these duties.
+
 **On phones**: tabs sit at the bottom within thumb reach, the licence page shows days left and the risk
 check before the details, and operators can tap **☆ Save** on their licences. Saved licences appear at the
 top of Home with warnings, stored on that phone only (no account). The site can be added to the home

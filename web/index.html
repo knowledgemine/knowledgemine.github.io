@@ -25,6 +25,7 @@
     <a href="#overview" data-view="overview">Overview</a>
     <a href="#licence" data-view="licence">Licence check</a>
     <a href="#mineral" data-view="mineral">Minerals</a>
+    <a href="#law" data-view="law">Law</a>
     <a href="#map" data-view="map">Map</a>
   </nav>
   <span class="asof mono" id="asof"></span>
@@ -37,6 +38,8 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Licence</a>
   <a href="#mineral" data-view="mineral">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 5v8l-8 5-8-5V8z M4 8l8 5 8-5 M12 13v8"/></svg>Minerals</a>
+  <a href="#law" data-view="law">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3 3 0 006 0zM19 7l-3 7a3 3 0 006 0z"/></svg>Law</a>
   <a href="#map" data-view="map">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg>Map</a>
 </nav>
@@ -128,6 +131,19 @@
     </div>
   </section>
   <div id="min-out"></div>
+</main>
+
+<!-- ================= LAW ================= -->
+<main id="view-law" class="view page" hidden>
+  <section class="intro">
+    <h1>What the law requires</h1>
+    <p class="lede">Duties of mining licence holders under Nepal's mining and environment laws: what to do, by when,
+      and what happens if you don't. Every point cites its section or rule.</p>
+  </section>
+  <section class="card dates-card" id="law-dates" aria-label="Key dates"></section>
+  <div class="chips" id="law-filter" role="group" aria-label="Show duties for"></div>
+  <div id="law-out" class="law-topics"></div>
+  <section class="card" id="law-sources"></section>
 </main>
 
 <!-- ================= MAP ================= -->
@@ -225,6 +241,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/6.5.0/turf.min.js"></script>
 <script src="app.js"></script>
+<script src="law.js"></script>
 <script src="views.js"></script>
 </body>
 </html>

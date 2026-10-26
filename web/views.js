@@ -310,6 +310,7 @@ function renderLicence(no, isExample = false) {
           <span class="pill ${flags ? "soon" : "st-Approved"}">${flags ? `${flags} to check` : "No flags"}</span></div>
         <ul class="checks">${checks.map(([c, ic, t, s]) => `<li class="${c}"><span class="ic">${ic}</span><span>${t}${s ? `<small>${s}</small>` : ""}</span></li>`).join("")}</ul>
       </section>
+      ${lawChecklistHTML(p)}
       <section class="card o4"><h2>Within ${META.near_km || 5} km</h2>
         <div class="nstats">
           <div><b>${nb.length}</b><span>licences</span></div>
@@ -436,7 +437,7 @@ function renderMineral(name) {
 }
 
 /* =================== ROUTER =================== */
-const VIEWS = ["overview", "licence", "mineral", "map"];
+const VIEWS = ["overview", "licence", "mineral", "law", "map"];
 function show(view) {
   for (const v of VIEWS) $(`view-${v}`).hidden = v !== view;
   document.querySelectorAll(".tabs a, .bottomnav a").forEach((a) => { if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
@@ -460,6 +461,7 @@ function route() {
   }
   if (k === "holder") { show("licence"); renderHolder(v); return; }
   if (k === "mineral") { show("mineral"); renderMineral(v); return; }
+  if (k === "law") { show("law"); renderLaw(v); return; }
   if (k === "expiring" || k === "expired") {
     show("map"); initMap();
     mapState.validity = k === "expiring" ? "soon" : "expired"; $("validity").value = mapState.validity;

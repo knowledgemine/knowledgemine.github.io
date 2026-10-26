@@ -113,3 +113,37 @@ def enrich(lic: gpd.GeoDataFrame, layers: dict[str, gpd.GeoDataFrame]) -> gpd.Ge
 
 def today_bs():
     return nd.date.from_datetime_date(dt.date.today()).strftime("%Y-%m-%d")
+
+
+def _month_end(y, m):
+    nxt = nd.date(y + (m == 12), m % 12 + 1, 1)
+    return nxt - dt.timedelta(days=1)
+
+
+def law_dates(today=None):
+    """Next statutory deadlines in B.S. (Rules 2056: rule 21(2) royalty, rules 42 and 45 renewal/annual report)."""
+    t = nd.date.from_datetime_date(today or dt.date.today())
+    fy_start = t.year if t.month >= 4 else t.year - 1  # fiscal year starts 1 Shrawan (month 4)
+    # renewal + annual report: within 3 months after the fiscal year ends (end of Asar) = end of Ashwin
+    ashwin_end = _month_end(fy_start, 6)
+    if t <= ashwin_end:
+        renew, renew_fy = ashwin_end, fy_start - 1
+    else:
+        renew, renew_fy = _month_end(fy_start + 1, 6), fy_start
+    # royalty: deposit within 7 days after each month ends, voucher within 15 days
+    if t.day <= 7:
+        roy = nd.date(t.year, t.month, 7)
+        pm = (t.year - (t.month == 1), (t.month - 2) % 12 + 1)
+    else:
+        ny, nm = t.year + (t.month == 12), t.month % 12 + 1
+        roy, pm = nd.date(ny, nm, 7), (t.year, t.month)
+    voucher = nd.date(roy.year, roy.month, 15)
+    iso = lambda d: d.to_datetime_date().isoformat()  # noqa: E731
+    fy = lambda y: f"{y}/{str(y + 1)[-2:]}"  # noqa: E731
+    return {
+        "today_bs": t.strftime("%Y-%m-%d"),
+        "fy": fy(fy_start),
+        "renewal": {"bs": renew.strftime("%Y-%m-%d"), "ad": iso(renew), "for_fy": fy(renew_fy)},
+        "royalty": {"bs": roy.strftime("%Y-%m-%d"), "ad": iso(roy), "for_month": f"{pm[0]}-{pm[1]:02d}"},
+        "voucher": {"bs": voucher.strftime("%Y-%m-%d"), "ad": iso(voucher)},
+    }

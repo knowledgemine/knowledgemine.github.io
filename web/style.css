@@ -208,6 +208,33 @@ a.btn:not(.ghost) { color: var(--accent-ink); }
 .pcard .min { font-weight: 600; }
 .pcard .meta { color: var(--muted); font-size: 12.5px; }
 
+/* ---------- law ---------- */
+.law-topics { display: flex; flex-direction: column; gap: 24px; }
+.law-topic { display: flex; flex-direction: column; gap: 10px; scroll-margin-top: calc(var(--bar-h) + 12px); }
+.law-topic > h2 { font-family: var(--font-display); font-stretch: 85%; font-weight: 800; font-size: 22px; margin: 0; }
+.law-item { scroll-margin-top: calc(var(--bar-h) + 12px); }
+.law-item h3 { margin: 0; font-size: 16px; font-weight: 600; }
+.law-item p { margin: 0; max-width: 78ch; }
+.law-item .when { color: var(--ink-2); }
+.law-item .fees { font-size: 13px; color: var(--ink-2); background: var(--bg); border-radius: 8px; padding: 8px 10px; }
+.law-item.focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--soft); }
+.law-status { max-width: 90ch; }
+.refs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.ref { font-family: var(--font-mono); font-size: 11.5px; border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px; color: var(--ink-2); text-decoration: none; background: var(--panel); }
+.ref:hover { border-color: var(--accent); color: var(--accent); }
+.ifnot { background: var(--bad-bg); color: var(--ink); border-radius: 8px; padding: 10px 12px; font-size: 13.5px; display: flex; flex-direction: column; gap: 6px; }
+.ifnot b { color: var(--bad); }
+.datelist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.datelist li { display: grid; grid-template-columns: minmax(170px, auto) 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--grid); align-items: start; }
+.datelist .when b { font-family: var(--font-display); font-stretch: 85%; font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.datelist small { display: block; color: var(--muted); font-size: 12px; }
+.datelist li.warn .when b { color: var(--warn); }
+.sources { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.sources .note { display: block; }
+.checks .info .ic { background: var(--bg); color: var(--s1); }
+.checks .refs { margin-top: 5px; }
+.checks small a { white-space: nowrap; }
+
 /* ---------- map view ---------- */
 body.is-map { height: 100%; overflow: hidden; }
 body.is-map .page-foot { display: none; }
@@ -305,7 +332,7 @@ body.is-map .page-foot { display: none; }
   .logo { font-size: 20px; }
   .asof { display: inline; margin-left: auto; font-size: 11px; }
   .bottomnav {
-    display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000;
+    display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000;
     background: var(--panel); border-top: 1px solid var(--line);
     padding-bottom: env(safe-area-inset-bottom, 0px);
     padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
@@ -323,7 +350,8 @@ body.is-map .page-foot { display: none; }
   /* licence page: days left, then risks, details, neighbours, portfolio */
   .lic-grid { display: flex; flex-direction: column; align-items: stretch; gap: 14px; }
   .lic-col { display: contents; }
-  .o1 { order: 1; } .o2 { order: 2; } .o3 { order: 3; } .o4 { order: 4; } .o5 { order: 5; }
+  .o1 { order: 1; } .o2, .o2b { order: 2; } .o3 { order: 3; } .o4 { order: 4; } .o5 { order: 5; }
+  .datelist li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .lic-title .min { font-size: 28px; }
   .portfolio { grid-template-columns: minmax(0, 1fr); }
   .findings ul { padding-left: 18px; }
