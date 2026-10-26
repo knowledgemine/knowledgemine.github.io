@@ -29,6 +29,7 @@
     <a href="#map" data-view="map">Map</a>
   </nav>
   <span class="asof mono" id="asof"></span>
+  <a id="acc-link" class="acc-link" href="#account" data-acc-link hidden>Sign in</a>
 </header>
 
 <nav class="bottomnav" aria-label="Sections">
@@ -146,6 +147,24 @@
   <section class="card" id="law-sources"></section>
 </main>
 
+<!-- ================= ACCOUNT ================= -->
+<main id="view-account" class="view page" hidden>
+  <section class="intro">
+    <h1>Account</h1>
+    <p class="lede">Your company's licences, team and hisab-kitab, private to your company and available on any device.</p>
+  </section>
+  <div id="acc-out"></div>
+</main>
+
+<!-- ================= HISAB ================= -->
+<main id="view-hisab" class="view page" hidden>
+  <section class="intro">
+    <h1>Hisab-kitab</h1>
+    <p class="lede">Monthly production, royalty, sales, expenses and filings for each licence, with royalty due dates and late surcharge worked out for you.</p>
+  </section>
+  <div id="hisab-out"></div>
+</main>
+
 <!-- ================= MAP ================= -->
 <div id="view-map" class="view mapview" hidden>
   <aside class="panel" aria-label="Search and results">
@@ -241,7 +260,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/6.5.0/turf.min.js"></script>
 <script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
 <script src="law.js"></script>
 <script src="views.js"></script>
+<script src="account.js"></script>
 </body>
 </html>

@@ -288,6 +288,7 @@ function renderLicence(no, isExample = false) {
           <a class="btn" href="#point=${lat.toFixed(5)}|${lng.toFixed(5)}|5">Show on map</a>
           <button class="btn ghost" type="button" id="lic-copy">Copy summary</button>
           <a class="btn ghost" href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" rel="noopener">Google Maps</a>
+          ${typeof companyButtonHTML === "function" ? companyButtonHTML(p) : ""}
         </div>
       </section>
       <section class="card o3"><h2>Details</h2>
@@ -437,7 +438,7 @@ function renderMineral(name) {
 }
 
 /* =================== ROUTER =================== */
-const VIEWS = ["overview", "licence", "mineral", "law", "map"];
+const VIEWS = ["overview", "licence", "mineral", "law", "account", "hisab", "map"];
 function show(view) {
   for (const v of VIEWS) $(`view-${v}`).hidden = v !== view;
   document.querySelectorAll(".tabs a, .bottomnav a").forEach((a) => { if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
@@ -450,7 +451,9 @@ function route() {
   const [k, ...rest] = h.split("=");
   const v = rest.join("=");
   $("saved-lic").hidden = true;
-  if (!h || k === "overview") { show("overview"); renderOverview(); renderSaved($("saved-home")); return; }
+  if (!h || k === "overview") { show("overview"); renderOverview(); renderSaved($("saved-home")); if (typeof renderAccountHome === "function") renderAccountHome(); return; }
+  if (k === "account") { show("account"); renderAccount(); return; }
+  if (k === "hisab") { show("hisab"); renderHisab(); return; }
   if (k === "licence" && v) { show("licence"); renderLicence(v); return; }
   if (k === "licence") {
     show("licence"); initLicence(); $("lic-msg").hidden = true;
@@ -474,6 +477,7 @@ function route() {
 loadData().then(() => {
   $("asof").textContent = META.downloaded ? `DMG data of ${META.downloaded}` : "";
   window.addEventListener("hashchange", route);
+  if (typeof initAccounts === "function") initAccounts();
   initLicence(); // fills the licence/company suggestions used by the home search too
   $("quick-form").addEventListener("submit", (e) => {
     e.preventDefault();

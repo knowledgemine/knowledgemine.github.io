@@ -120,6 +120,12 @@ def _month_end(y, m):
     return nxt - dt.timedelta(days=1)
 
 
+def bs_calendar(first=2070, last=2099):
+    """{'2083-07': '2026-10-18', ...}: A.D. date of the 1st of every B.S. month, for converting dates in the browser."""
+    return {f"{y}-{m:02d}": nd.date(y, m, 1).to_datetime_date().isoformat()
+            for y in range(first, last + 1) for m in range(1, 13)}
+
+
 def law_dates(today=None):
     """Next statutory deadlines in B.S. (Rules 2056: rule 21(2) royalty, rules 42 and 45 renewal/annual report)."""
     t = nd.date.from_datetime_date(today or dt.date.today())

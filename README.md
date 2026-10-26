@@ -71,6 +71,13 @@ Notes on the numbers:
 - Holders are grouped by a cleaned company name, so spelling variants may still split one company.
 - Map tiles load from Esri and CARTO, so the background needs internet.
 
+**Account and Hisab-kitab** (`#account`, `#hisab`): sign in with email, create a company, invite staff, and keep
+the company's licences in sync across devices. For each licence: monthly production and mine-gate quantity,
+royalty due (Schedule 10 rate, editable) plus the 10% local development fee, due dates and late surcharge
+(rule 21), payments and vouchers, expenses, filings (renewal, annual report, BES/IEE/EIA), a yearly summary
+with unpaid-royalty warnings, and a Schedule 9-style annual production report. Runs on Supabase; off until
+`web/config.js` is filled in. Setup: [supabase/SETUP.md](supabase/SETUP.md).
+
 ### Publishing for operators
 
 `.github/workflows/pages.yml` downloads fresh DMG data every Sunday (and on each push), rebuilds the app
