@@ -148,6 +148,7 @@ create index if not exists entries_company_date on public.entries (company_id, e
 create index if not exists entries_party on public.entries (party_id);
 create index if not exists parties_company on public.parties (company_id);
 create index if not exists filings_company on public.filings (company_id, licence_no);
+create index if not exists company_members_user on public.company_members (user_id);
 
 -- ---------------------------------------------------------------- helpers (run as table owner)
 create or replace function public.is_member(cid uuid) returns boolean
@@ -161,6 +162,10 @@ language sql stable security definer set search_path = public as $$
                  and role in ('owner', 'admin'));
 $$;
 
+-- RLS policies call these as the signed-in user; nobody else needs them
+revoke all on function public.is_member(uuid), public.is_admin(uuid) from public, anon;
+grant execute on function public.is_member(uuid), public.is_admin(uuid) to authenticated;
+
 -- whoever creates a company becomes its owner
 create or replace function public.add_owner() returns trigger
 language plpgsql security definer set search_path = public as $$
@@ -170,6 +175,8 @@ begin
   on conflict do nothing;
   return new;
 end $$;
+
+revoke all on function public.add_owner() from public, anon, authenticated;
 
 drop trigger if exists companies_add_owner on public.companies;
 create trigger companies_add_owner after insert on public.companies
@@ -201,6 +208,7 @@ begin
   end if;
   return new;
 end $$;
+revoke all on function public.check_entry_party() from public, anon, authenticated;
 drop trigger if exists entries_check_party on public.entries;
 create trigger entries_check_party before insert or update on public.entries
   for each row execute function public.check_entry_party();
@@ -219,21 +227,21 @@ alter table public.filings enable row level security;
 
 drop policy if exists "own profile" on public.profiles;
 create policy "own profile" on public.profiles for all to authenticated
-  using (id = auth.uid()) with check (id = auth.uid());
+  using (id = (select auth.uid())) with check (id = (select auth.uid()));
 
 drop policy if exists "members read company" on public.companies;
 create policy "members read company" on public.companies for select to authenticated
-  using (public.is_member(id) or created_by = auth.uid());
+  using (public.is_member(id) or created_by = (select auth.uid()));
 drop policy if exists "anyone signed in creates company" on public.companies;
 create policy "anyone signed in creates company" on public.companies for insert to authenticated
-  with check (created_by = auth.uid());
+  with check (created_by = (select auth.uid()));
 drop policy if exists "admins edit company" on public.companies;
 create policy "admins edit company" on public.companies for update to authenticated
   using (public.is_admin(id)) with check (public.is_admin(id));
 drop policy if exists "owner deletes company" on public.companies;
 create policy "owner deletes company" on public.companies for delete to authenticated
   using (exists (select 1 from public.company_members m where m.company_id = companies.id
-                 and m.user_id = auth.uid() and m.role = 'owner'));
+                 and m.user_id = (select auth.uid()) and m.role = 'owner'));
 
 drop policy if exists "members see team" on public.company_members;
 create policy "members see team" on public.company_members for select to authenticated
@@ -243,7 +251,7 @@ create policy "admins change team" on public.company_members for update to authe
   using (public.is_admin(company_id) and role <> 'owner') with check (public.is_admin(company_id) and role <> 'owner');
 drop policy if exists "admins remove members or leave" on public.company_members;
 create policy "admins remove members or leave" on public.company_members for delete to authenticated
-  using ((public.is_admin(company_id) and role <> 'owner') or (user_id = auth.uid() and role <> 'owner'));
+  using ((public.is_admin(company_id) and role <> 'owner') or (user_id = (select auth.uid()) and role <> 'owner'));
 
 drop policy if exists "admins manage invites" on public.company_invites;
 create policy "admins manage invites" on public.company_invites for all to authenticated
